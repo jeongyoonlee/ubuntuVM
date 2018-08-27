@@ -61,6 +61,27 @@
             "dependsOn": [
                 "[concat('Microsoft.Network/networkInterfaces/', parameters('networkInterfaceName'))]"
             ],
+	    "resources": [
+		{
+		    "type": "extensions",
+		    "name": "ConfigureUbuntu",
+		    "apiVersion": "[providers('Microsoft.Compute','virtualMachines/extensions').apiVersions[0]]",
+		    "location": "[resourceGroup().location]",
+		    "dependsOn": [
+			"[resourceId('Microsoft.Compute/virtualMachines/', parameters('virtualMachineName'))]"
+		    ],
+		    "properties": {
+			"publisher": "Microsoft.OSTCExtensions",
+			"type": "CustomScriptForLinux", 
+			"typeHandlerVersion": "1.5",
+			"autoUpgradeMinorVersion": true,
+			"settings": {
+			    "fileUris": [ "file:///mnt/d/repo/ForecastingToolkit-Common/lib/install/config.sh" ],
+			    "commandToExecute": "bash config.sh"
+			}
+		    }
+		}        
+	    ],
             "properties": {
                 "osProfile": {
                     "computerName": "[parameters('virtualMachineName')]",
@@ -91,7 +112,7 @@
                         "createOption": "fromImage",
                         "diskSizeGB": "[parameters('diskSizeGB')]",
                         "managedDisk": {
-                            "storageAccountType": "Premium_LRS"
+                            "storageAccountType": "Standard_LRS"
                         }
                     },
                     "dataDisks": []
@@ -109,32 +130,7 @@
                         "storageUri": "[concat('https://', parameters('diagnosticsStorageAccountName'), '.blob.core.windows.net/')]"
                     }
                 }
-            },
-            "resources": [
-                {
-                  "type": "extensions",
-                  "name": "ConfigureMLSServer",
-                  "apiVersion": "[providers('Microsoft.Compute','virtualMachines/extensions').apiVersions[0]]",
-                  "location": "[resourceGroup().location]",
-                  "dependsOn": [
-                    "[resourceId('Microsoft.Compute/virtualMachines/', variables('vmName'))]"
-                  ],
-                  "properties": {
-                    "publisher": "Microsoft.OSTCExtensions",
-                    "type": "CustomScriptForLinux",
-                    "typeHandlerVersion": "1.4",
-                    "autoUpgradeMinorVersion": true,
-                    "settings": {
-                      "fileUris": [
-                        "[variables('scriptUriMLSConfigure')]"
-                      ]
-                    },
-                    "protectedSettings": {
-                      "commandToExecute": "[concat('bash mlsconfigure.sh \"', variables('deploymentProfile'), '\" \"', variables('sqlServerName'), '\" \"', variables('sqlDatabaseName'), '\" \"',parameters('sqlserverAdminLogin'), '\" \"', parameters('sqlserverAdminPassword'), '\" \"', variables('scriptUriSql'), '\" \"', variables('pkgMLSDistcomp'), '\" \"', variables('scriptUriMLSBootstrapper'), '\" \"', concat(variables('vmName'), '.', resourceGroup().location, '.cloudapp.azure.com'), '\" \"', parameters('sshUserPassword'), '\" \"', parameters('tenantName'), '\" \"', parameters('aadAppLocalResource'), '\" \"', parameters('aadAppLocalClient'), '\" \"', parameters('aadAppLocalClientSecret'), '\"')]"
-                    }
-                  }
-                }        
-              ]
+            }
         },
         {
             "name": "[parameters('networkInterfaceName')]",
@@ -232,7 +228,6 @@
                 ]
             }
         }
-  
     ],
     "outputs": {
         "adminUsername": {
