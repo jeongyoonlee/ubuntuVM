@@ -1,4 +1,12 @@
 #!/bin/bash
+# deploy.sh
+# 28 Aug 2018 JMA
+# Invoke an Azure Resource Manager (ARM) template to create a VM
+# using local bash 'az' commands. 
+#
+# The inverse - to remove the VM is best done by deleting its resource group:
+# $ az group delete --name myResourceGroup
+
 set -euo pipefail
 IFS=$'\n\t'
 
@@ -8,7 +16,7 @@ IFS=$'\n\t'
 
 usage() { echo "Usage: $0 -i <subscriptionId> -g <resourceGroupName> -n <deploymentName> -l <resourceGroupLocation>" 1>&2; exit 1; }
 
-declare subscription=""
+# declare subscriptionId=""
 declare resourceGroupName=""
 declare deploymentName=""
 declare resourceGroupLocation=""
@@ -54,9 +62,25 @@ if [ ! -f "$parametersFilePath" ]; then
 	exit 1
 fi
 
-if [ -z "$subscriptionId" ] || [ -z "$resourceGroupName" ] || [ -z "$deploymentName" ]; then
-	echo "Either one of subscriptionId, resourceGroupName, deploymentName is empty"
+if [ -z "$subscriptionId" ]; then
+	echo "SubscriptionId is empty"
 	usage
+else
+	echo "SubscriptionId is $subscriptionId ."
+fi
+
+if [ -z "$resourceGroupName" ]; then
+	echo "ResourceGroupName is empty"
+	usage
+else
+	echo "ResourceGroupName is $resourceGroupName ."
+fi
+
+if [ -z "$deploymentName" ]; then
+	echo "DeploymentName is empty"
+	usage
+else
+	echo "DeploymentName is $deploymentName"
 fi
 
 #login to azure using your credentials
@@ -89,7 +113,8 @@ fi
 #Start deployment
 if [ $validate = 1 ]; then
     printf "Validating deployment...\n"
-    az group deployment validate --resource-group "$resourceGroupName" \
+		# Validate does not take a --name arg
+	az group deployment validate --resource-group "$resourceGroupName" \
 	--template-file "$templateFilePath" \
 	--parameters "@${parametersFilePath}"
 else

@@ -5,8 +5,11 @@
         "location": {
             "value": "westus2"
         },
+        "resourceGroupName": {
+            "value": "dlnn18829"
+        },
         "virtualMachineName": {
-            "value": "miniub18167"
+            "value": "miniub18829"
         },
         "virtualMachineSize": {
             "value": "Standard_B2s"
@@ -18,13 +21,13 @@
             "value": "lrndlvm"
         },
         "networkInterfaceName": {
-            "value": "miniub18167925"
+            "value": "miniub1882925"
         },
         "diskSizeGB": {
             "value": "30"
         },
         "networkSecurityGroupName": {
-            "value": "miniub18167-nsg"
+            "value": "miniub18829-nsg"
         },
         "adminPublicKey": {
             "value": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDQlGyK2ff8rzjbHoBWcF9683iAkQV7P4KalGG1x8Yatxd/rMpuKlJL/LMIsVjavmWJ0UugX1+n+h6bIKM2PoN0TjIXZleRLa02fE6y+jXBkRkFbtuSOCr+qQBJo55dmGt5m06wOsU49xvcSWr2xbYOrlRY6ozPVE24DpuIp9/b7Aw+EKzNcOkwSJGSuPBoafB1pRNEeN8WOwUUfpgiriwHPkYG6+05naW5H5JM5Hs5LQi1FZ7vVALgZgY6pSINq1FN0BOmKbUriIBVHHZ08La3WwP3D6DklVuR8/x7rnEj/3rWz7I8cJEahYJRhsIg70wkkkKeam8gpixzkvnWglpB"
@@ -39,7 +42,7 @@
             "value": "Subnet"
         },
         "publicIpAddressName": {
-            "value": "miniub18167-ip"
+            "value": "miniub18829-ip"
         },
         "publicIpAddressType": {
             "value": "Dynamic"

@@ -8,6 +8,9 @@
         "virtualMachineName": {
             "type": "string"
         },
+        "resourceGroupName": {
+            "type": "string"
+        },
         "virtualMachineSize": {
             "type": "string"
         },
@@ -49,7 +52,7 @@
         }
     },
     "variables": {
-        "vnetId": "[resourceId('dlnn','Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
+        "vnetId": "[resourceId(parameters('resourceGroupName'),'Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
         "subnetRef": "[concat(variables('vnetId'), '/subnets/', parameters('subnetName'))]"
     },
     "resources": [
@@ -76,7 +79,7 @@
 			"typeHandlerVersion": "1.5",
 			"autoUpgradeMinorVersion": true,
 			"settings": {
-			    "fileUris": [ "file:///mnt/d/repo/ForecastingToolkit-Common/lib/install/config.sh" ],
+                "fileUris": ["https://github.com/jmagosta/ubuntuVM/blob/c8415606e36c85e93cf8509cadb48bfe00efa4d0/config.sh" ],
 			    "commandToExecute": "bash config.sh"
 			}
 		    }
@@ -151,13 +154,13 @@
                             },
                             "privateIPAllocationMethod": "Dynamic",
                             "publicIpAddress": {
-                                "id": "[resourceId('dlnn','Microsoft.Network/publicIpAddresses', parameters('publicIpAddressName'))]"
+                                "id": "[resourceId(parameters('resourceGroupName'),'Microsoft.Network/publicIpAddresses', parameters('publicIpAddressName'))]"
                             }
                         }
                     }
                 ],
                 "networkSecurityGroup": {
-                    "id": "[resourceId('dlnn', 'Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroupName'))]"
+                    "id": "[resourceId(parameters('resourceGroupName'), 'Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroupName'))]"
                 }
             }
         },
