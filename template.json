@@ -79,7 +79,7 @@
 			"typeHandlerVersion": "1.5",
 			"autoUpgradeMinorVersion": true,
 			"settings": {
-                "fileUris": ["https://github.com/jmagosta/ubuntuVM/blob/c8415606e36c85e93cf8509cadb48bfe00efa4d0/config.sh" ],
+                "fileUris": ["https://raw.githubusercontent.com/jmagosta/ubuntuVM/c8415606e36c85e93cf8509cadb48bfe00efa4d0/config.sh" ],
 			    "commandToExecute": "bash config.sh"
 			}
 		    }
