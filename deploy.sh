@@ -14,9 +14,9 @@ IFS=$'\n\t'
 # -o: prevents errors in a pipeline from being masked
 # IFS new value is less likely to cause confusing bugs when looping arrays or arguments (e.g. $@)
 
-usage() { echo "Usage: $0 -i <subscriptionId> -g <resourceGroupName> -n <deploymentName> -l <resourceGroupLocation>" 1>&2; exit 1; }
+usage() { echo "Usage: $0 [-d] [-n <deploymentName> ]" 1>&2; exit 1; }
 
-# declare subscriptionId=""
+declare subscriptionId=""
 declare resourceGroupName=""
 declare deploymentName=""
 declare resourceGroupLocation=""
@@ -29,25 +29,28 @@ declare templateFilePath="template.json"
 #parameter file path
 declare parametersFilePath="parameters.json"
 
-# Validate only
-validate=1
+# Deploy instead of just validate
+validate=0
 
 
 # Initialize parameters specified from command line, if specified. 
-while getopts ":i:g:n:l:" arg; do
+while getopts ":dhn:" arg; do
 	case "${arg}" in
-		i)
-			subscriptionId=${OPTARG}
-			;;
-		g)
-			resourceGroupName=${OPTARG}
+		d)
+			validate=1	
 			;;
 		n)
 			deploymentName=${OPTARG}
 			;;
-		l)
-			resourceGroupLocation=${OPTARG}
+		h)
+			printf "$0:
+        -d:                    Validate template.json
+        -n  <DeploymentName>:  Name for VM\n\n"
+			exit 1
 			;;
+		\?)
+			printf "Invalid option -$OPTARG\n"
+			usage
 		esac
 done
 shift $((OPTIND-1))
@@ -97,7 +100,7 @@ az account set --subscription $subscriptionId
 set +e
 
 #Check for existing RG
-az group show $resourceGroupName 1> /dev/null
+az group show --name $resourceGroupName 1> /dev/null
 
 if [ $? != 0 ]; then
 	echo "Resource group with name" $resourceGroupName "could not be found. Creating new resource group.."
@@ -105,6 +108,8 @@ if [ $? != 0 ]; then
 	(
 		set -x
 		az group create --name $resourceGroupName --location $resourceGroupLocation 1> /dev/null
+		# Note, if creating a new resource group, a new virtual network is needed e.g. 
+		# az network vnet create -g dlnn18829 --name dlnn18829-vnet --subnet-name Subnet
 	)
 	else
 	echo "Using existing resource group..."
@@ -117,6 +122,10 @@ if [ $validate = 1 ]; then
 	az group deployment validate --resource-group "$resourceGroupName" \
 	--template-file "$templateFilePath" \
 	--parameters "@${parametersFilePath}"
+	if [ $?  == 0 ];
+ 	then
+		echo "Template has been successfully validated."
+	fi
 else
     printf "Starting deployment...\n"
     (
@@ -126,9 +135,9 @@ else
 	   --template-file "$templateFilePath" \
 	   --parameters "@${parametersFilePath}"
     )
+	if [ $?  == 0 ];
+ 	then
+		echo "Template has been successfully deployed."
+	fi
 fi
 
-if [ $?  == 0 ];
- then
-	echo "Template has been successfully deployed"
-fi
