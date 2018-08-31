@@ -4,7 +4,7 @@
 # Invoke an Azure Resource Manager (ARM) template to create a VM
 # using local bash 'az' commands. 
 #
-# The inverse - to remove the VM is best done by deleting its resource group:
+# The inverse - to remove the VM is best done by deleting its unique resource group:
 # $ az group delete --name myResourceGroup
 
 set -euo pipefail
@@ -16,9 +16,14 @@ IFS=$'\n\t'
 
 usage() { echo "Usage: $0 [-d] [-h] [-n <deploymentName> ]" 1>&2; exit 1; }
 
+# Date string "year.dayofyear.hour" e.g. 18.243.10
+date_string=$(date +'%y.%j.%k')
+
+# Create a unique default deployment name, used to track the task in the Portal
+declare deploymentName="VM_dply_$date_string"
+
 declare subscriptionId=""
 declare resourceGroupName=""
-declare deploymentName=""
 declare resourceGroupLocation=""
 source secrets.sh
 

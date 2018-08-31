@@ -2,6 +2,9 @@
 # 19 July 2018 JMA
 # Things to do to customize an Ubuntu VM
 
+# Bring in subsidiary files:
+curl -O "https://raw.githubusercontent.com/jmagosta/ubuntuVM/master/config.py"
+
 # Check if this is a DSVM
 # The command will fail if not an Azure VM 
 curl -H Metadata:true "http://169.254.169.254/metadata/instance?api-version=2017-08-01" | \
