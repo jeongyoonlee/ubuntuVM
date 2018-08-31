@@ -2,9 +2,13 @@
 # deploy.sh
 # 28 Aug 2018 JMA
 # Invoke an Azure Resource Manager (ARM) template to create a VM
-# using local bash 'az' commands. 
+# using local bash 'az' commands.  This is the entry point for the process
 #
-# The inverse - to remove the VM is best done by deleting its unique resource group:
+# From a local bash shell (e.g. Once you download the repo), run this as
+# $ bash deploy.sh
+#
+# The inverse - to remove the VM is best done by deleting its unique resource group
+# with this command:
 # $ az group delete --name myResourceGroup
 
 set -euo pipefail
@@ -20,13 +24,18 @@ usage() { echo "Usage: $0 [-d] [-h] [-n <deploymentName> ]" 1>&2; exit 1; }
 date_string=$(date +'%y.%j.%k')
 
 # Create a unique default deployment name, used to track the task in the Portal
+# (could be cmd line options)
 declare deploymentName="VM_dply_$date_string"
-
+declare virtualMachineName="fpvm_$date_string"
+declare resourceGroupName="fgrg_$date_string"
+# Use the local as a default
+declare userName=$USER
+# Load these from a separate file
 declare subscriptionId=""
-declare resourceGroupName=""
 declare resourceGroupLocation=""
 source secrets.sh
 
+# Customize parameters json file
 
 #templateFile Path - template file to be used
 declare templateFilePath="template.json"
@@ -105,16 +114,16 @@ az account set --subscription $subscriptionId
 set +e
 
 #Check for existing RG
-az group show --name $resourceGroupName 1> /dev/null
+group_exists=$(az group exists --name $resourceGroupName)
 
-if [ $? != 0 ]; then
+if [ $group_exists == 'false' ]; then
 	echo "Resource group with name" $resourceGroupName "could not be found. Creating new resource group.."
 	set -e
 	(
 		set -x
 		az group create --name $resourceGroupName --location $resourceGroupLocation 1> /dev/null
 		# Note, if creating a new resource group, a new virtual network is needed e.g. 
-		# az network vnet create -g dlnn18829 --name dlnn18829-vnet --subnet-name Subnet
+		az network vnet create -g $resourceGroupName --name "${resourceGroupName}-vnet" --subnet-name Subnet 1> /dev/null
 	)
 	else
 	echo "Using existing resource group..."
@@ -138,11 +147,12 @@ else
 	az group deployment create --name "$deploymentName" \
 	   --resource-group "$resourceGroupName" \
 	   --template-file "$templateFilePath" \
-	   --parameters "@${parametersFilePath}"
+	   --parameters "@${parametersFilePath}"  1> /dev/null
     )
 	if [ $?  == 0 ];
  	then
 		echo "Template has been successfully deployed."
+		az vm list-ip-addresses -g "$resourceGroupName" -n  "$virtualMachineName"
 	fi
 fi
 

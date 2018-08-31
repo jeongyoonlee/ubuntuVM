@@ -2,6 +2,8 @@
 # 19 July 2018 JMA
 # Things to do to customize an Ubuntu VM
 
+
+cd /home/jma
 # Bring in subsidiary files:
 curl -O "https://raw.githubusercontent.com/jmagosta/ubuntuVM/master/config.py"
 
