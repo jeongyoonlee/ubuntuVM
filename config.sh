@@ -1,9 +1,10 @@
 #!/bin/bash
-# 19 July 2018 JMA
+# 5 Sept 2018 JMA
 # Things to do to customize an Ubuntu VM
 
-
-cd ${HOME} 
+# This file runs with waagent permissions
+VMUSER=$1
+cd /home/${VMUSER}
 # Bring in subsidiary files:
 curl -O "https://raw.githubusercontent.com/jmagosta/ubuntuVM/master/config.py"
 
@@ -12,3 +13,5 @@ curl -O "https://raw.githubusercontent.com/jmagosta/ubuntuVM/master/config.py"
 curl -H Metadata:true "http://169.254.169.254/metadata/instance?api-version=2017-08-01" | \
     python -m json.tool | \
     tee vm_properties.json
+
+chown -R ${VMUSER} *

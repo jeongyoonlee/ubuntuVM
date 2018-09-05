@@ -77,7 +77,7 @@
 			"autoUpgradeMinorVersion": true,
 			"settings": {
                 "fileUris": ["https://raw.githubusercontent.com/jmagosta/ubuntuVM/c8415606e36c85e93cf8509cadb48bfe00efa4d0/config.sh" ],
-			    "commandToExecute": "bash config.sh"
+			    "commandToExecute": "[concat('bash config.sh', parameters('adminUsername'))]"
 			}
 		    }
 		}        
@@ -126,7 +126,7 @@
                 },
                 "diagnosticsProfile": {
                     "bootDiagnostics": {
-                        "enabled": true,
+                        "enabled": false,
                         "storageUri": "[concat('https://', parameters('diagnosticsStorageAccountName'), '.blob.core.windows.net/')]"
                     }
                 }

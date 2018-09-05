@@ -21,12 +21,12 @@ IFS=$'\n\t'
 usage() { echo "Usage: $0 [-d] [-h] [-n <deploymentName> ]" 1>&2; exit 1; }
 
 # Date string "year.dayofyear.hour" e.g. 18.243.10
-date_string=$(date +'%y.%j.%k')
+date_string=$(date +'%y.%j.%H')
 
 # Create a unique default deployment name, used to track the task in the Portal
 # (could be cmd line options)
 declare deploymentName="VM_dply_$date_string"
-declare virtualMachineName="fpvm$(date +'%y%j%k')"
+declare virtualMachineName="fpvm$(date +'%y%j%H')"
 declare resourceGroupName="fprg_$date_string"
 # Use the local as a default
 declare userName=$USER
@@ -41,6 +41,9 @@ source secrets.sh
 	${userName}\
 	${subscriptionId}\
 	${resourceGroupLocation}
+
+# Customize config.sh that is pushed to the VM
+# ./config_set.py ${userName}
 
 #templateFile Path - template file to be used
 declare templateFilePath="template.json"

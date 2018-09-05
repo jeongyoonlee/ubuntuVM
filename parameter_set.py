@@ -28,7 +28,6 @@ else:
     subscriptionId = sys.argv[4] 
     resourceGroupLocation = sys.argv[5] 
 
-
 # Set corresponding json fields
 proto_params_fd = open(PARAM_INPUT_FILE)
 jp = json.load(proto_params_fd) 
@@ -45,7 +44,6 @@ params["networkInterfaceName"]["value"] = resourceGroupName + "-nin"
 params["networkSecurityGroupName"]["value"] = resourceGroupName + "-nsg"
 # params["diagnosticsStorageAccountName"]["value"] = resourceGroupName + "-dsa"
 params["publicIpAddressName"]["value"] = resourceGroupName + "-ip"
-#params["diagnosticsStorageAccountId"]["value"] = 
 
 # Insert params into the full parameters file
 jp["parameters"] = params
