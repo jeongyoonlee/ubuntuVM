@@ -35,9 +35,6 @@
         "diagnosticsStorageAccountName": {
             "type": "string"
         },
-        "diagnosticsStorageAccountId": {
-            "type": "string"
-        },
         "subnetName": {
             "type": "string"
         },

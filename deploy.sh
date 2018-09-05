@@ -26,8 +26,8 @@ date_string=$(date +'%y.%j.%k')
 # Create a unique default deployment name, used to track the task in the Portal
 # (could be cmd line options)
 declare deploymentName="VM_dply_$date_string"
-declare virtualMachineName="fpvm_$date_string"
-declare resourceGroupName="fgrg_$date_string"
+declare virtualMachineName="fpvm$(date +'%y%j%k')"
+declare resourceGroupName="fprg_$date_string"
 # Use the local as a default
 declare userName=$USER
 # Load these from a separate file
@@ -35,7 +35,12 @@ declare subscriptionId=""
 declare resourceGroupLocation=""
 source secrets.sh
 
-# Customize parameters json file
+# Customize parameters json file by substituting into parameters.json
+./parameter_set.py ${virtualMachineName}\
+	${resourceGroupName}\
+	${userName}\
+	${subscriptionId}\
+	${resourceGroupLocation}
 
 #templateFile Path - template file to be used
 declare templateFilePath="template.json"
@@ -69,6 +74,13 @@ while getopts ":dhn:" arg; do
 done
 shift $((OPTIND-1))
 
+if [ -z "$virtualMachineName" ]; then
+	echo "$virtualMachineName not found"
+	exit 1
+else
+	printf "Will create VM $virtualMachineName.\n"
+fi
+
 if [ ! -f "$templateFilePath" ]; then
 	echo "$templateFilePath not found"
 	exit 1
@@ -83,14 +95,14 @@ if [ -z "$subscriptionId" ]; then
 	echo "SubscriptionId is empty"
 	usage
 else
-	echo "SubscriptionId is $subscriptionId ."
+	echo "SubscriptionId is $subscriptionId "
 fi
 
 if [ -z "$resourceGroupName" ]; then
 	echo "ResourceGroupName is empty"
 	usage
 else
-	echo "ResourceGroupName is $resourceGroupName ."
+	echo "ResourceGroupName is $resourceGroupName "
 fi
 
 if [ -z "$deploymentName" ]; then
@@ -109,7 +121,7 @@ then
 fi
 
 #set the default subscription id
-az account set --subscription $subscriptionId
+az account set --subscription $subscriptionId 1> /dev/null
 
 set +e
 
@@ -138,7 +150,7 @@ if [ $validate = 1 ]; then
 	--parameters "@${parametersFilePath}"
 	if [ $?  == 0 ];
  	then
-		echo "Template has been successfully validated."
+		echo "Template has been validated."
 	fi
 else
     printf "Starting deployment...\n"
