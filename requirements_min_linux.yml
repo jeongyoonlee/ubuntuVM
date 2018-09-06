@@ -1,0 +1,36 @@
+################################################################################
+#
+# This file is used to update the conda environment to use the Azure ML
+# Package for Forecasting on Ubuntu Linux. It is downloaded by the 
+# install_azuremlftk_linux.sh from the azuremlftkrelease blob.
+#
+# The build process copies this file into the blob daily from the master
+# branch. This is the single source of truth for AMLPF requirements for
+# installation on Ubuntu.
+#
+# This version removes dask, logging and base dependencies. 
+#
+################################################################################
+
+dependencies:
+  # The python interpreter version.
+  # Currently Azure ML Workbench only supports 3.5.2.
+  - python=3.5.2
+
+  # Required for Jupyter Notebooks.
+  - ipykernel>=4.8
+
+  # AzureML FTK dependencies
+  - statsmodels
+  - pandas==0.20.3
+  - scikit-learn>=0.19.1
+  
+  - pip:
+
+    # pythonnet - we must build our own wheel
+    - https://azuremlftkrelease.blob.core.windows.net/latest/pythonnet-2.4.0.dev0-cp35-cp35m-linux_x86_64.whl
+
+
+    # AMLPF wheel, which can be installed after everything else is installed
+    - https://azuremlftkrelease.blob.core.windows.net/latest/azuremlftk-1.0.0b1-py3-none-any.whl
+

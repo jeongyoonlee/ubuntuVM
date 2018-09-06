@@ -76,8 +76,8 @@
 			"typeHandlerVersion": "1.5",
 			"autoUpgradeMinorVersion": true,
 			"settings": {
-                "fileUris": ["https://raw.githubusercontent.com/jmagosta/ubuntuVM/c8415606e36c85e93cf8509cadb48bfe00efa4d0/config.sh" ],
-			    "commandToExecute": "[concat('bash config.sh', parameters('adminUsername'))]"
+                "fileUris": ["https://raw.githubusercontent.com/jmagosta/ubuntuVM/master/config.sh" ],
+			    "commandToExecute": "[concat('bash config.sh ', parameters('adminUsername'))]"
 			}
 		    }
 		}        
