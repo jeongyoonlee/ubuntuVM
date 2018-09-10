@@ -6,12 +6,31 @@
 VMUSER=$1
 cd /home/${VMUSER}
 # Bring in subsidiary files:
-curl -O "https://raw.githubusercontent.com/jmagosta/ubuntuVM/master/config.py"
+# curl -O "https://raw.githubusercontent.com/jmagosta/ubuntuVM/master/config.py"
+curl -O "https://github.com/jmagosta/ubuntuVM/blob/master/install/py35_explicit.txt"
+curl -O "https://github.com/jmagosta/ubuntuVM/blob/master/install/requirements_min_linux.yml"
 
 # Check if this is a DSVM
-# The command will fail if not an Azure VM 
-curl -H Metadata:true "http://169.254.169.254/metadata/instance?api-version=2017-08-01" | \
-    python -m json.tool | \
-    tee vm_properties.json
+
+
+# Is the json parser for bash installed
+if ! hash jq 2>/dev/null; then
+    sudo apt-get -y install jq
+fi
+
+#Given the install succeeded
+if hash jq 2>/dev/null; then
+    METADATA=$(curl -s -H Metadata:true "http://169.254.169.254/metadata/instance?api-version=2017-08-01" )
+    if [ $? = 0 ]; then       # curl succeeded, we are on a VM
+	echo $METADATA | jq .  > vm_properties.json
+	VM_OFFER=$(echo $METADATA | jq .compute.offer)
+	VM_VERSION=$(echo $METADATA | jq .compute.version)
+	printf 'VM: %s, %s\n' $VM_OFFER $VM_VERSION
+    fi
+fi
+
+# Append variables to .bashrc file
+printf "export VM_OFFER=${VM_OFFER}\nexport VM_VERSION=${VM_VERSION}\n" >> .bashrc
+source .bashrc
 
 chown -R ${VMUSER} *
