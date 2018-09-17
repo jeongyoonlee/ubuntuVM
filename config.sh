@@ -29,8 +29,8 @@ if hash jq 2>/dev/null; then
     fi
 fi
 
+chown -R ${VMUSER} * 
 # Append variables to .bashrc file
-printf "export VM_OFFER=${VM_OFFER}\nexport VM_VERSION=${VM_VERSION}\n" >> .bashrc
+printf "export VM_OFFER=${VM_OFFER}\nexport VM_VERSION=${VM_VERSION}\n" >> /home/${VMUSER}/.bashrc
+# (This doesn't do what's intended.)
 source .bashrc
-
-chown -R ${VMUSER} *

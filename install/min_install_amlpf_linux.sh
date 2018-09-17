@@ -2,7 +2,7 @@
 # Copyright (C) Microsoft Corporation. All rights reserved
 # Install the latest version of the AML Package for Forecasting  from Azure Storage
 # To run,
-# $./install_amlpf_linux.sh [--no-clone] [-help]
+# $./min_install_amlpf_linux.sh [--dsvm] [-help]
 #
 ###############################################################################
 ### Define a few variables that help govern the code
@@ -46,7 +46,7 @@ conda_version_check() {
     # Is there a current conda environment? 
     if ! hash conda 2>/dev/null; then
         wget -q "https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh"
-        bash "Miniconda3-latest-Linux-x86_64.sh"
+        bash "Miniconda3-latest-Linux-x86_64.sh" -b
         sudo conda update conda
     else
 	    # Check the version

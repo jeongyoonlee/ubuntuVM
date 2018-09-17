@@ -8,9 +8,6 @@
         "virtualMachineName": {
             "type": "string"
         },
-        "resourceGroupName": {
-            "type": "string"
-        },
         "virtualMachineSize": {
             "type": "string"
         },
@@ -23,9 +20,6 @@
         "networkInterfaceName": {
             "type": "string"
         },
-        "diskSizeGB": {
-            "type": "string"
-        },
         "networkSecurityGroupName": {
             "type": "string"
         },
@@ -35,7 +29,13 @@
         "diagnosticsStorageAccountName": {
             "type": "string"
         },
+        "addressPrefix": {
+            "type": "string"
+        },
         "subnetName": {
+            "type": "string"
+        },
+        "subnetPrefix": {
             "type": "string"
         },
         "publicIpAddressName": {
@@ -49,7 +49,7 @@
         }
     },
     "variables": {
-        "vnetId": "[resourceId(parameters('resourceGroupName'),'Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
+        "vnetId": "[resourceId('dlnn','Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
         "subnetRef": "[concat(variables('vnetId'), '/subnets/', parameters('subnetName'))]"
     },
     "resources": [
@@ -61,61 +61,58 @@
             "dependsOn": [
                 "[concat('Microsoft.Network/networkInterfaces/', parameters('networkInterfaceName'))]"
             ],
-	    "resources": [
-		{
-		    "type": "extensions",
-		    "name": "ConfigureUbuntu",
-		    "apiVersion": "[providers('Microsoft.Compute','virtualMachines/extensions').apiVersions[0]]",
-		    "location": "[resourceGroup().location]",
-		    "dependsOn": [
-			"[resourceId('Microsoft.Compute/virtualMachines/', parameters('virtualMachineName'))]"
-		    ],
-		    "properties": {
-			"publisher": "Microsoft.OSTCExtensions",
-			"type": "CustomScriptForLinux", 
-			"typeHandlerVersion": "1.5",
-			"autoUpgradeMinorVersion": true,
-			"settings": {
-                "fileUris": ["https://raw.githubusercontent.com/jmagosta/ubuntuVM/master/config.sh" ],
-			    "commandToExecute": "[concat('bash config.sh ', parameters('adminUsername'))]"
-			}
-		    }
-		}        
-	    ],
+        "resources": [
+            {
+                "type": "extensions",
+                "name": "ConfigureUbuntu",
+                "apiVersion": "[providers('Microsoft.Compute','virtualMachines/extensions').apiVersions[0]]",
+                "location": "[resourceGroup().location]",
+                "dependsOn": [
+                "[resourceId('Microsoft.Compute/virtualMachines/', parameters('virtualMachineName'))]"
+                ],
+                "properties": {
+                "publisher": "Microsoft.OSTCExtensions",
+                "type": "CustomScriptForLinux", 
+                "typeHandlerVersion": "1.5",
+                "autoUpgradeMinorVersion": true,
+                "settings": {
+                    "fileUris": ["https://raw.githubusercontent.com/jmagosta/ubuntuVM/master/config.sh" ],
+                    "commandToExecute": "[concat('bash config.sh ', parameters('adminUsername'))]"
+                    }
+                }
+            }        
+        ],
             "properties": {
                 "osProfile": {
                     "computerName": "[parameters('virtualMachineName')]",
                     "adminUsername": "[parameters('adminUsername')]",
-                    "linuxConfiguration": {
-                        "disablePasswordAuthentication": "true",
-                        "ssh": {
-                            "publicKeys": [
-                                {
-                                    "path": "[concat('/home/', parameters('adminUsername'), '/.ssh/authorized_keys')]",
-                                    "keyData": "[parameters('adminPublicKey')]"
-                                }
-                            ]
-                        }
-                    }
+                    "adminPassword": "[parameters('adminPassword')]"
                 },
                 "hardwareProfile": {
                     "vmSize": "[parameters('virtualMachineSize')]"
                 },
                 "storageProfile": {
                     "imageReference": {
-                        "publisher": "Canonical",
-                        "offer": "UbuntuServer",
-                        "sku": "16.04-LTS",
+                        "publisher": "microsoft-dsvm",
+                        "offer": "linux-data-science-vm-ubuntu",
+                        "sku": "linuxdsvmubuntu",
                         "version": "latest"
                     },
                     "osDisk": {
                         "createOption": "fromImage",
-                        "diskSizeGB": "[parameters('diskSizeGB')]",
                         "managedDisk": {
-                            "storageAccountType": "Standard_LRS"
+                            "storageAccountType": "Premium_LRS"
                         }
                     },
-                    "dataDisks": []
+                    "dataDisks": [
+                        {
+                            "createOption": "fromImage",
+                            "lun": 0,
+                            "managedDisk": {
+                                "storageAccountType": "Premium_LRS"
+                            }
+                        }
+                    ]
                 },
                 "networkProfile": {
                     "networkInterfaces": [
@@ -133,11 +130,33 @@
             }
         },
         {
+            "name": "[parameters('virtualNetworkName')]",
+            "type": "Microsoft.Network/virtualNetworks",
+            "apiVersion": "2018-04-01",
+            "location": "[parameters('location')]",
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "[parameters('addressPrefix')]"
+                    ]
+                },
+                "subnets": [
+                    {
+                        "name": "[parameters('subnetName')]",
+                        "properties": {
+                            "addressPrefix": "[parameters('subnetPrefix')]"
+                        }
+                    }
+                ]
+            }
+        },
+        {
             "name": "[parameters('networkInterfaceName')]",
             "type": "Microsoft.Network/networkInterfaces",
             "apiVersion": "2018-04-01",
             "location": "[parameters('location')]",
             "dependsOn": [
+                "[concat('Microsoft.Network/virtualNetworks/', parameters('virtualNetworkName'))]",
                 "[concat('Microsoft.Network/publicIpAddresses/', parameters('publicIpAddressName'))]",
                 "[concat('Microsoft.Network/networkSecurityGroups/', parameters('networkSecurityGroupName'))]"
             ],
@@ -151,13 +170,13 @@
                             },
                             "privateIPAllocationMethod": "Dynamic",
                             "publicIpAddress": {
-                                "id": "[resourceId(parameters('resourceGroupName'),'Microsoft.Network/publicIpAddresses', parameters('publicIpAddressName'))]"
+                                "id": "[resourceId('dlnn','Microsoft.Network/publicIpAddresses', parameters('publicIpAddressName'))]"
                             }
                         }
                     }
                 ],
                 "networkSecurityGroup": {
-                    "id": "[resourceId(parameters('resourceGroupName'), 'Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroupName'))]"
+                    "id": "[resourceId('dlnn', 'Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroupName'))]"
                 }
             }
         },
@@ -181,9 +200,39 @@
             "properties": {
                 "securityRules": [
                     {
+                        "name": "JupyterHub",
+                        "properties": {
+                            "priority": 1010,
+                            "protocol": "TCP",
+                            "access": "Allow",
+                            "direction": "Inbound",
+                            "sourceApplicationSecurityGroups": [],
+                            "destinationApplicationSecurityGroups": [],
+                            "sourceAddressPrefix": "*",
+                            "sourcePortRange": "*",
+                            "destinationAddressPrefix": "*",
+                            "destinationPortRange": "8000"
+                        }
+                    },
+                    {
+                        "name": "RStudio_Server",
+                        "properties": {
+                            "priority": 1020,
+                            "protocol": "TCP",
+                            "access": "Allow",
+                            "direction": "Inbound",
+                            "sourceApplicationSecurityGroups": [],
+                            "destinationApplicationSecurityGroups": [],
+                            "sourceAddressPrefix": "*",
+                            "sourcePortRange": "*",
+                            "destinationAddressPrefix": "*",
+                            "destinationPortRange": "8787"
+                        }
+                    },
+                    {
                         "name": "SSH",
                         "properties": {
-                            "priority": 300,
+                            "priority": 1030,
                             "protocol": "TCP",
                             "access": "Allow",
                             "direction": "Inbound",
@@ -193,36 +242,6 @@
                             "sourcePortRange": "*",
                             "destinationAddressPrefix": "*",
                             "destinationPortRange": "22"
-                        }
-                    },
-                    {
-                        "name": "HTTPS",
-                        "properties": {
-                            "priority": 320,
-                            "protocol": "TCP",
-                            "access": "Allow",
-                            "direction": "Inbound",
-                            "sourceApplicationSecurityGroups": [],
-                            "destinationApplicationSecurityGroups": [],
-                            "sourceAddressPrefix": "*",
-                            "sourcePortRange": "*",
-                            "destinationAddressPrefix": "*",
-                            "destinationPortRange": "443"
-                        }
-                    },
-                    {
-                        "name": "HTTP",
-                        "properties": {
-                            "priority": 340,
-                            "protocol": "TCP",
-                            "access": "Allow",
-                            "direction": "Inbound",
-                            "sourceApplicationSecurityGroups": [],
-                            "destinationApplicationSecurityGroups": [],
-                            "sourceAddressPrefix": "*",
-                            "sourcePortRange": "*",
-                            "destinationAddressPrefix": "*",
-                            "destinationPortRange": "80"
                         }
                     }
                 ]

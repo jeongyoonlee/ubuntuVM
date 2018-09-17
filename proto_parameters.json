@@ -35,8 +35,14 @@
         "diagnosticsStorageAccountName": {
             "value": "dnndiag243"
         },
+        "addressPrefix": {
+            "value": "10.1.0.0/24"
+        },
         "subnetName": {
             "value": "Subnet"
+        },
+        "subnetPrefix": {
+            "value": "10.1.0.0/24"
         },
         "publicIpAddressName": {
             "value": "miniub18829-ip"

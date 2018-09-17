@@ -7,6 +7,9 @@ import os, os.path, sys, json
 PARAM_INPUT_FILE = "proto_parameters.json"
 PARAM_FILE = "parameters.json"
 
+# perhaps promote to cmd line args
+VM_SKU= 'Standard_B2s'
+
 # Assume ssh keys exist for this account. 
 # Note that ~ expansion on WSL is not consistent
 def ssh_key_str():
@@ -19,7 +22,7 @@ def ssh_key_str():
 
 # script variables, passed as command line arguments
 if len(sys.argv) <= 5 :
-    print("Missing all 5 variables", file=sys.stderr)
+    print("Missing 5 variables", file=sys.stderr)
     exit(1)
 else:
     virtualMachineName = sys.argv[1]
@@ -44,6 +47,11 @@ params["networkInterfaceName"]["value"] = resourceGroupName + "-nin"
 params["networkSecurityGroupName"]["value"] = resourceGroupName + "-nsg"
 # params["diagnosticsStorageAccountName"]["value"] = resourceGroupName + "-dsa"
 params["publicIpAddressName"]["value"] = resourceGroupName + "-ip"
+### Instead we select DSVM by choice of template.json file in deploy.sh
+# if use_dsvm:
+#     params["virtualMachineSize"]["value"] = VANILLA_VM
+# else:
+#     params["virtualMachineSize"]["value"] = DSVM
 
 # Insert params into the full parameters file
 jp["parameters"] = params

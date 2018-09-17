@@ -18,7 +18,7 @@ IFS=$'\n\t'
 # -o: prevents errors in a pipeline from being masked
 # IFS new value is less likely to cause confusing bugs when looping arrays or arguments (e.g. $@)
 
-usage() { echo "Usage: $0 [-d] [-h] [-n <deploymentName> ]" 1>&2; exit 1; }
+usage() { echo "Usage: $0 [-d] [-m] [-h] [-n <deploymentName> ]" 1>&2; exit 1; }
 
 # Date string "year.dayofyear.hour" e.g. 18.243.10
 date_string=$(date +'%y.%j.%H')
@@ -35,18 +35,8 @@ declare subscriptionId=""
 declare resourceGroupLocation=""
 source secrets.sh
 
-# Customize parameters json file by substituting into parameters.json
-./parameter_set.py ${virtualMachineName}\
-	${resourceGroupName}\
-	${userName}\
-	${subscriptionId}\
-	${resourceGroupLocation}
-
-# Customize config.sh that is pushed to the VM
-# ./config_set.py ${userName}
-
 #templateFile Path - template file to be used
-declare templateFilePath="template.json"
+declare templateFilePath="vm_template.json"
 
 #parameter file path
 declare parametersFilePath="parameters.json"
@@ -54,19 +44,23 @@ declare parametersFilePath="parameters.json"
 # Deploy instead of just validate
 validate=0
 
-
 # Initialize parameters specified from command line, if specified. 
-while getopts ":dhn:" arg; do
+while getopts ":dhn:m" arg; do
 	case "${arg}" in
 		d)
-			validate=1	
+			validate=1
+			;;
+		m)
+    		# Choice of the kind of VM to use.
+		    templateFilePath="dsvm_template.json"
 			;;
 		n)
 			deploymentName=${OPTARG}
 			;;
 		h)
 			printf "$0:
-        -d:                    Validate template.json
+        -d                     Validate template.json
+		-m                     Not just a VM, but a DSVM
         -n  <DeploymentName>:  Name for VM\n\n"
 			exit 1
 			;;
@@ -114,6 +108,18 @@ if [ -z "$deploymentName" ]; then
 else
 	echo "DeploymentName is $deploymentName"
 fi
+
+# Customize parameters json file by substituting into parameters.json
+./parameter_set.py ${virtualMachineName}\
+	${resourceGroupName}\
+	${userName}\
+	${subscriptionId}\
+	${resourceGroupLocation}
+
+# Customize config.sh that is pushed to the VM
+# ./config_set.py ${userName}
+
+
 
 #login to azure using your credentials
 az account show 1> /dev/null
