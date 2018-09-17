@@ -17,7 +17,11 @@ The endpoint is one command  that completes with a running VM with PF pre-instal
 
 ### Technicalities
 
-The ARM template requires a URI for the config file to be run on the VM, which should be provided by this repo.  This can be done using a permanent link to the file in github.  This is created in github by browsing to the file, displaying the raw version, then pressing "y" as a shortcut to convert the link shown in the browser to a `permalink.`  _I bet you din't know that._  
+The ARM template requires a URI for the config file to be run on the VM, which should be provided by this repo.  This can be done using a permanent link to the file in github.  This is created in github by browsing to the file, displaying the raw version, then pressing "y" as a shortcut to convert the link shown in the browser to a `permalink.`  _I bet you din't know that._  i
+
+#### Resource group creation
+
+A new resource group is created when the template is validated (by `./deploy.sh -d`) whose name includes the current hour-timestamp. This assures that resource creation is possible before running the full deployment. This resource group will then be used by the deployment.  If the deployment is not completed, or if it is attempted at a later time, the validation-time resource group will persist as an unused vestige. 
 
 A couple options are contained in the `template.json` file and not exposed in the deploy options. Making changes require editing template files, possibly generating new template files from the Portal. 
 
@@ -57,5 +61,14 @@ The templates push a shell script via this extension. Here's where the name of t
 			    "commandToExecute": "[concat('bash config.sh ', parameters('adminUsername'))]"
 			    }
 		    }
+
+#### Machine Size
+
+This parameter is hard-wired into the `proto_parameters.json` file. 
+
+        "virtualMachineSize": {
+            "value":  "Standard_D4s_v3" 
+        },
+#### Storage blob for diagnostics
 
 
