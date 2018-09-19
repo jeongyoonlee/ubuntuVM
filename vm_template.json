@@ -23,9 +23,6 @@
         "networkInterfaceName": {
             "type": "string"
         },
-        "diskSizeGB": {
-            "type": "string"
-        },
         "networkSecurityGroupName": {
             "type": "string"
         },
@@ -113,13 +110,6 @@
                         "offer": "UbuntuServer",
                         "sku": "16.04-LTS",
                         "version": "latest"
-                    },
-                    "osDisk": {
-                        "createOption": "fromImage",
-                        "diskSizeGB": "[parameters('diskSizeGB')]",
-                        "managedDisk": {
-                            "storageAccountType": "Standard_LRS"
-                        }
                     },
                     "dataDisks": []
                 },

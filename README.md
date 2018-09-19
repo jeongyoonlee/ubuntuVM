@@ -69,6 +69,12 @@ This parameter is hard-wired into the `proto_parameters.json` file.
         "virtualMachineSize": {
             "value":  "Standard_D4s_v3" 
         },
+
+Change this value (get a list from ?? ).
+
+Note that the DSVM does not support all VM sizes, and the VM images differ in different regions. Some smaller sizes do not support the premium storage expected by the DSVM. 
+
+
 #### Storage blob for diagnostics
 
 
