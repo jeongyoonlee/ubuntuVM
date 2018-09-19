@@ -3,31 +3,32 @@ Example of an ARM script to configure and deploy an Ubuntu VM on Azure from a lo
 example we load the Forecasting Package to customize the VM. 
 
 ## Minimal Install
-Here's the end-to-end minimal install idea:  
+ An end-to-end minimal install consists of   
 
-``` Deploy local shell script in github ->
-        “az group deployment create   … “ ->
-        template.json for VM and related resources
-    which invokes a config shell script on the newly created VM
-    which loads a docker container with PF installed. 
+* Deploy local shell script in github 
+* that runs `az group deployment create   … `
+* using `template.json` to create VM and related resources
+* which invokes a config shell script on the newly created VM
+* which can install, for instance, the Forecast Package.
 ```
 
-The endpoint is one command  that completes with a running VM with PF pre-installed, much like the DSVM comes with tools pre-installed (possibly we do this on top of the DSVM).  
+The user executes one command  that completes with a running VM with PF pre-installed, much like the DSVM comes with tools pre-installed. There are options to create either a fresh ubuntu VM or creating it on top of the DSVM.  
 
 
 ### Technicalities
 
-The ARM template requires a URI for the config file to be run on the VM, which should be provided by this repo.  This can be done using a permanent link to the file in github.  This is created in github by browsing to the file, displaying the raw version, then pressing "y" as a shortcut to convert the link shown in the browser to a `permalink.`  _I bet you din't know that._  i
+The ARM template requires a URI for the config shell script to be run on the VM, which should be provided by this repo.  This can be done using a permanent link to the file in github.  This is created in github by browsing to the file, displaying the raw version, then pressing "y" as a shortcut to convert the link shown in the browser to a `permalink.`  _I bet you din't know that._  i
 
-#### Resource group creation
+#
+### Resource group creation
 
-A new resource group is created when the template is validated (by `./deploy.sh -d`) whose name includes the current hour-timestamp. This assures that resource creation is possible before running the full deployment. This resource group will then be used by the deployment.  If the deployment is not completed, or if it is attempted at a later time, the validation-time resource group will persist as an unused vestige. 
+A new resource group is created when the template is validated (by `./deploy.sh -d`) whose name is derived from the current hour-timestamp. This assures that resource creation is possible before running the full deployment. This resource group will then be used by the deployment.  If the deployment is not completed, or if it is attempted at a later time, the validation-time resource group will persist as an unused vestige. Or if two deployments are done within the hour, the second will fail due to duplicated names. 
 
-A couple options are contained in the `template.json` file and not exposed in the deploy options. Making changes require editing template files, possibly generating new template files from the Portal. 
+A couple options are contained in the two `template.json` files, one for plain VMs, and one for DSVMs, and are not exposed in the deploy options. Making changes require editing template files, possibly generating new template files from the Portal. 
 
-#### DSVM or just plain ubuntu?
+### DSVM or just plain ubuntu?
 
-The choice of the product is embedded here, for the DSVM:
+The choice of the product is a command line option to choose template files with different images. Here's the fragment that specifies a DSVM:
 
                 "storageProfile": {
                     "imageReference": {
@@ -49,7 +50,7 @@ alternately for the unbuntu VM:
 
 #### Configuration scripts
 
-The templates push a shell script via this extension. Here's where the name of the script can be changed.  Search for it under resources:
+The templates push a shell script that executes when the VM in created via this extension. Here's where the name of the script can be changed.  Search for it under resources:
 
 		    "properties": {
 			"publisher": "Microsoft.OSTCExtensions",
@@ -70,11 +71,20 @@ This parameter is hard-wired into the `proto_parameters.json` file.
             "value":  "Standard_D4s_v3" 
         },
 
-Change this value (get a list from ?? ).
-
-Note that the DSVM does not support all VM sizes, and the VM images differ in different regions. Some smaller sizes do not support the premium storage expected by the DSVM. 
+Before you change this value note that the DSVM does not support all VM sizes, and the VM images differ in different regions. Some smaller sizes do not support the premium storage expected by the DSVM. 
 
 
 #### Storage blob for diagnostics
+
+The template assumes there is an existing storage blob available for VM diagnostics.  This blob may be reused for many VMs and doesn't have to be in the same resource group as the VM.  You would need to reference it in this part of the template. If such a blob is not available, you disable it, but setting "enabled" to `false`, like this:
+
+                "diagnosticsProfile": {
+                    "bootDiagnostics": {
+                        "enabled": false,
+                        "storageUri": "[concat('https://', parameters('diagnosticsStorageAccountName'), '.blob.core.windows.net/')]"
+                    }
+                }
+
+
 
 
