@@ -45,22 +45,27 @@ print_usage(){
 conda_version_check() {
     # Is there a current conda environment? 
     if ! hash conda 2>/dev/null; then
-        wget -q "https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh"
-        bash "Miniconda3-latest-Linux-x86_64.sh" -b
-        sudo conda update conda
-    else
-	    # Check the version
-	    CONDA_VERSION=$(conda --version 2>&1)        # Output is to stdout.
-	    VERSION_NO=${CONDA_VERSION/conda /}
-	    MAJOR_VERSION=${VERSION_NO:0:1}
-	    MINOR_VERSION=${VERSION_NO:2:1}
-	    if (( MAJOR_VERSION >= CONDA_MAINVERSION )) && ((  MINOR_VERSION >= CONDA_SUBVERSION )); then 
-	         DEFAULT_ENV_NAME=CONDA_BASE_ENV
-	         printf "The install will use your current conda version $VERSION_NO.\n"
-	    else
-	        sudo conda update conda
-	    fi
+        sudo apt update --yes
+        sudo apt upgrade --yes
+        # Get Miniconda and make it the main Python interpreter
+        wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda.sh
+        bash ~/miniconda.sh -b -p ~/miniconda 
+        rm ~/miniconda.sh
+        echo "PATH=\$PATH:\$HOME/miniconda/bin" >> .bashrc
     fi
+
+    # Check the version
+    CONDA_VERSION=$(conda --version 2>&1)        # Output is to stdout.
+    VERSION_NO=${CONDA_VERSION/conda /}
+    MAJOR_VERSION=${VERSION_NO:0:1}
+    MINOR_VERSION=${VERSION_NO:2:1}
+    if (( MAJOR_VERSION >= CONDA_MAINVERSION )) && ((  MINOR_VERSION >= CONDA_SUBVERSION )); then 
+            DEFAULT_ENV_NAME=CONDA_BASE_ENV
+            printf "The install will use your current conda version $VERSION_NO.\n"
+    else
+        sudo conda update conda
+    fi
+
 }
 
 python_version_check() {

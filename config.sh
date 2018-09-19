@@ -10,10 +10,7 @@ cd /home/${VMUSER}
 curl -O "https://github.com/jmagosta/ubuntuVM/blob/master/install/py35_explicit.txt"
 curl -O "https://github.com/jmagosta/ubuntuVM/blob/master/install/requirements_min_linux.yml"
 
-# Check if this is a DSVM
-
-
-# Is the json parser for bash installed
+# The json parser for bash? Install if missing
 if ! hash jq 2>/dev/null; then
     sudo apt-get -y install jq
 fi

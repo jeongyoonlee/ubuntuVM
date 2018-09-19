@@ -25,14 +25,18 @@ dependencies:
   - pandas==0.20.3
   - scikit-learn>=0.19.1
   
+  # Replace the mono and the pythonnet installs. 
   - pip:
+
+    # AML logging package on which common package azuremltkbase depends
+    - https://azuremldownloads.azureedge.net/history-packages/preview/azureml.logging-1.0.81-py3-none-any.whl
+
+    # Azureml packages
+    # Core
+    - https://azuremlftkrelease.blob.core.windows.net/azpkg/azpkgcore-1.0.0b1-py3-none-any.whl
 
     # pythonnet - we must build our own wheel
     - https://azuremlftkrelease.blob.core.windows.net/latest/pythonnet-2.4.0.dev0-cp35-cp35m-linux_x86_64.whl
-
-
-    # AMLPF wheel, which can be installed after everything else is installed
-    - https://azuremlftkrelease.blob.core.windows.net/latest/azuremlftk-1.0.0b1-py3-none-any.whl
 
     # This is a rude hack until the base package is obsoleted by the Python SDk integration, we need this file imported.
     - https://azuremlftkrelease.blob.core.windows.net/mininstall/ftwrapper-1.0.0.tar.gz
