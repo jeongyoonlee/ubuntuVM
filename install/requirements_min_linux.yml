@@ -37,7 +37,3 @@ dependencies:
 
     # pythonnet - we must build our own wheel
     - https://azuremlftkrelease.blob.core.windows.net/latest/pythonnet-2.4.0.dev0-cp35-cp35m-linux_x86_64.whl
-
-    # This is a rude hack until the base package is obsoleted by the Python SDk integration, we need this file imported.
-    - https://azuremlftkrelease.blob.core.windows.net/mininstall/ftwrapper-1.0.0.tar.gz
-    

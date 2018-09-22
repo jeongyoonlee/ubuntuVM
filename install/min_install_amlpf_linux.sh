@@ -133,6 +133,6 @@ sudo ${CONDA_BASE_PATH}conda env update --file ${REQUIREMENTS} -n ${CONDA_BASE_E
 # register new ipython kernel 
 # Use ipython within the current conda env
 IPY_PATH_IN_AML_ENV=`which ipython`
-sudo ${IPY_PATH_IN_AML_ENV} kernel install --name ${CONDA_BASE_ENV}} --display-name "${CONDA_BASE_ENV}"
+sudo ${IPY_PATH_IN_AML_ENV} kernel install --name ${CONDA_BASE_ENV} --display-name "${CONDA_BASE_ENV}"
 
 exit 0
