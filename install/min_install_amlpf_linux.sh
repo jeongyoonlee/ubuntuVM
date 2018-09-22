@@ -13,10 +13,9 @@ STORAGE_PREFIX=samples
 # AMLPF_ENV_NAME=azuremlftk_jul2018
 REQUIREMENTS=requirements_min_linux.yml
 
-AMLPF_REQ_FILE_LOC=https://${STORAGE_ACCOUNT}.blob.core.windows.net/${RELEASE}/${REQUIREMENTS}
+# AMLPF_REQ_FILE_LOC=https://${STORAGE_ACCOUNT}.blob.core.windows.net/${RELEASE}/${REQUIREMENTS}
 
 UBUNTU="ubuntu"
-RED_HAT="red_hat"
 OS=""
 CONDA_MAINVERSION=4
 CONDA_SUBVERSION=5
@@ -25,22 +24,6 @@ CONDA_BASE_ENV='base'         # This was changed to 'base' in the current conda 
 
 PYTHON_MAINVERSION=3
 PYTHON_SUBVERSION=6
-
-###############################################################################
-# print_usage(){
-#     printf "Usage:    ${0} [-n] [-d] [-h]
-
-#     This script installs the AML Package for Forecasting using conda.
-#     The default is to create a new environment called (${AMLPF_ENV_NAME}).
-
-#     Options: 
-    
-#          --noclone | -n  Install the Package into the base conda environment (much faster).
-
-#          --dsvm |    -d  Assume versions found on the data science virtual machine.
-
-#          --help |    -h  Print this message and exit.\n\n"
-# }
 
 conda_version_check() {
     # Is there a current conda environment? 
@@ -81,57 +64,45 @@ python_version_check() {
     fi
 }
 
+free_space_check() {
+    # Check if there's at least 10G space to create a new environment
+    CONDA_FILESYSTEM_SPACE=$(df --output=avail $CONDA_BASE_PATH | sed -n '2{p}')
+    if [ ${CLONE_ROOT_ENVIRONMENT} ]; then
+        # available space in 1K blocks
+        if (( CONDA_FILESYSTEM_SPACE <  10000000)); then         # hack for 'is true'
+	        printf "Only $CONDA_FILESYSTEM_SPACE kB available on $CONDA_BASE_PATH. That might not be enough space.\n"
+        else
+	        printf "  $CONDA_FILESYSTEM_SPACE kB available on $CONDA_BASE_PATH.\n"
+        fi
+    fi
+}
+
 ##########################################################################
-# Set clone root environment to true if not said otherwise.
-# CLONE_ROOT_ENVIRONMENT=0
+# MAIN ############# 
+
+if !apt-get 2>/dev/null; then  #not ubuntu
+    printf "This script only runs on Ubuntu\n"
+    exit 1
+
+conda_version_check
 
 if $VM_OFFER~="data-science"; then
     CONDA_BASE_ENV='py35'
 else
-    # Vanilla ubuntu needs conda install
-fi
-
-if [ ${CONDA_BASE_ENV} == base ]; then
+    # Add things needed in the DSVM
     python_version_check
-fi
-
-if [ $# -gt 0 ]; then
-  #If there are command line parameters, check there values.
-  # Todo - replace with checking for env vars. 
-  case $1 in
-     --dsvm | -d)
-	 # Bypass version checking, assume a dsvm
-	 CONDA_BASE_ENV='py35'
-         #Do not clone the environment.
-         unset CLONE_ROOT_ENVIRONMENT
-	 ;;
-     --help | -h)
-         print_usage
-         exit 0
-         ;;
-     *)
-         printf "Error: Unknown option ${1}\n"
-         print_usage
-         exit 1
-         ;;
-  esac
-fi
-
-if hash apt-get 2>/dev/null; then  # ubuntu
-    #We are on the ubuntu
+    printf "We are on plain ubuntu, install mono\n"
     sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
     echo "deb http://download.mono-project.com/repo/ubuntu stable-xenial main" | sudo tee /etc/apt/sources.list.d/mono-official-stable.list
     sudo apt-get update
     sudo apt-get -y install mono-complete
     OS=${UBUNTU}
-else
-    printf "This script only runs on Ubuntu\n"
-    exit 1
+    printf "Create conda env $CONDA_BASE_ENV\n"
+    # Vanilla ubuntu conda install was done in conda_version_check()
+    conda create --name py35 --file py35_explicit.txt
+    CONDA_BASE_ENV='py35'
+fi
 
-v
-
-
-    
 # Make sure we start in the base conda env, if not there already
 source activate ${CONDA_BASE_ENV}
 #checking for presence of python v3 in the path
@@ -145,34 +116,23 @@ else
     Please check that the anaconda environment is in your path.\n"
 fi
 
-# Check if there's at least 10G space to create a new environment
-CONDA_FILESYSTEM_SPACE=$(df --output=avail $CONDA_BASE_PATH | sed -n '2{p}')
-if [ ${CLONE_ROOT_ENVIRONMENT} ]; then
-    # available space in 1K blocks
-    if (( CONDA_FILESYSTEM_SPACE <  10000000)); then         # hack for 'is true'
-	printf "Only $CONDA_FILESYSTEM_SPACE kB available on $CONDA_BASE_PATH. That might not be enough space.\n"
-    else
-	printf "  $CONDA_FILESYSTEM_SPACE kB available on $CONDA_BASE_PATH.\n"
-    fi
-fi
-
 # Activate the target conda environment
-source activate ${AMLPF_ENV_NAME}
+source activate ${CONDA_BASE_ENV}
 
 # Update env with AMLPF and its dependencies
 printf "
 ================================================================
 Installing Azure ML Package for Forecasting into the environment   
 ================================================================\n"
-wget  -q ${AMLPF_REQ_FILE_LOC} -O ${REQUIREMENTS}
+# wget  -q ${AMLPF_REQ_FILE_LOC} -O ${REQUIREMENTS}
 
-    sudo ${CONDA_BASE_PATH}conda env update --file requirements_linux.yml -n ${AMLPF_ENV_NAME}
+sudo ${CONDA_BASE_PATH}conda env update --file ${REQUIREMENTS} -n ${CONDA_BASE_ENV}}
     # ipykernel should be present already, but we want to be safe
-    sudo ${CONDA_BASE_PATH}conda install -y ipykernel -n ${AMLPF_ENV_NAME}
+#     sudo ${CONDA_BASE_PATH}conda install -y ipykernel -n ${CONDA_BASE_ENV}}
 
 # register new ipython kernel 
 # Use ipython within the current conda env
 IPY_PATH_IN_AML_ENV=`which ipython`
-sudo ${IPY_PATH_IN_AML_ENV} kernel install --name ${AMLPF_ENV_NAME} --display-name "${AMLPF_ENV_NAME}"
+sudo ${IPY_PATH_IN_AML_ENV} kernel install --name ${CONDA_BASE_ENV}} --display-name "${CONDA_BASE_ENV}"
 
 exit 0
