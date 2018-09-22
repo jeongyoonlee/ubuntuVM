@@ -11,9 +11,9 @@ STORAGE_ACCOUNT=azuremlftkrelease
 RELEASE=latest
 STORAGE_PREFIX=samples
 # AMLPF_ENV_NAME=azuremlftk_jul2018
-REQUIREMENTS=requirements_min_linux.yml
+REQUIREMENTS=requirements_linux.yml
 
-# AMLPF_REQ_FILE_LOC=https://${STORAGE_ACCOUNT}.blob.core.windows.net/${RELEASE}/${REQUIREMENTS}
+AMLPF_REQ_FILE_LOC=https://${STORAGE_ACCOUNT}.blob.core.windows.net/${RELEASE}/${REQUIREMENTS}
 
 UBUNTU="ubuntu"
 OS=""
@@ -124,7 +124,7 @@ printf "
 ================================================================
 Installing Azure ML Package for Forecasting into the environment   
 ================================================================\n"
-# wget  -q ${AMLPF_REQ_FILE_LOC} -O ${REQUIREMENTS}
+wget  -q ${AMLPF_REQ_FILE_LOC} -O ${REQUIREMENTS}
 
 sudo ${CONDA_BASE_PATH}conda env update --file ${REQUIREMENTS} -n ${CONDA_BASE_ENV}
     # ipykernel should be present already, but we want to be safe
