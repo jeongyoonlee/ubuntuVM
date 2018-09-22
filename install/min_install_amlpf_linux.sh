@@ -27,20 +27,20 @@ PYTHON_MAINVERSION=3
 PYTHON_SUBVERSION=6
 
 ###############################################################################
-print_usage(){
-    printf "Usage:    ${0} [-n] [-d] [-h]
+# print_usage(){
+#     printf "Usage:    ${0} [-n] [-d] [-h]
 
-    This script installs the AML Package for Forecasting using conda.
-    The default is to create a new environment called (${AMLPF_ENV_NAME}).
+#     This script installs the AML Package for Forecasting using conda.
+#     The default is to create a new environment called (${AMLPF_ENV_NAME}).
 
-    Options: 
+#     Options: 
     
-         --noclone | -n  Install the Package into the base conda environment (much faster).
+#          --noclone | -n  Install the Package into the base conda environment (much faster).
 
-         --dsvm |    -d  Assume versions found on the data science virtual machine.
+#          --dsvm |    -d  Assume versions found on the data science virtual machine.
 
-         --help |    -h  Print this message and exit.\n\n"
-}
+#          --help |    -h  Print this message and exit.\n\n"
+# }
 
 conda_version_check() {
     # Is there a current conda environment? 
@@ -82,11 +82,22 @@ python_version_check() {
 }
 
 ##########################################################################
-#Set clone root environment to true if not said otherwise.
-CLONE_ROOT_ENVIRONMENT=0
+# Set clone root environment to true if not said otherwise.
+# CLONE_ROOT_ENVIRONMENT=0
+
+if $VM_OFFER~="data-science"; then
+    CONDA_BASE_ENV='py35'
+else
+    # Vanilla ubuntu needs conda install
+fi
+
+if [ ${CONDA_BASE_ENV} == base ]; then
+    python_version_check
+fi
 
 if [ $# -gt 0 ]; then
   #If there are command line parameters, check there values.
+  # Todo - replace with checking for env vars. 
   case $1 in
      --dsvm | -d)
 	 # Bypass version checking, assume a dsvm
@@ -106,11 +117,20 @@ if [ $# -gt 0 ]; then
   esac
 fi
 
-conda_version_check
+if hash apt-get 2>/dev/null; then  # ubuntu
+    #We are on the ubuntu
+    sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
+    echo "deb http://download.mono-project.com/repo/ubuntu stable-xenial main" | sudo tee /etc/apt/sources.list.d/mono-official-stable.list
+    sudo apt-get update
+    sudo apt-get -y install mono-complete
+    OS=${UBUNTU}
+else
+    printf "This script only runs on Ubuntu\n"
+    exit 1
 
-if [ ${CONDA_BASE_ENV} == base ]; then
-    python_version_check
-fi
+v
+
+
     
 # Make sure we start in the base conda env, if not there already
 source activate ${CONDA_BASE_ENV}
@@ -146,18 +166,9 @@ Installing Azure ML Package for Forecasting into the environment
 ================================================================\n"
 wget  -q ${AMLPF_REQ_FILE_LOC} -O ${REQUIREMENTS}
 
-if [ "$OS" == "$UBUNTU" ]; then
     sudo ${CONDA_BASE_PATH}conda env update --file requirements_linux.yml -n ${AMLPF_ENV_NAME}
     # ipykernel should be present already, but we want to be safe
     sudo ${CONDA_BASE_PATH}conda install -y ipykernel -n ${AMLPF_ENV_NAME}
-else
-    #We have incompatible version of numpy installed. Delete it and run.
-    ${CONDA_BASE_PATH}conda remove numpy --yes -n ${AMLPF_ENV_NAME}
-    #Not using sudo for red_hat/centos
-    ${CONDA_BASE_PATH}conda env update --file requirements_linux.yml -n ${AMLPF_ENV_NAME}
-    # ipykernel should be present already, but we want to be safe
-    ${CONDA_BASE_PATH}conda install -y ipykernel -n ${AMLPF_ENV_NAME}
-fi
 
 # register new ipython kernel 
 # Use ipython within the current conda env
