@@ -86,7 +86,7 @@ if !apt-get 2>/dev/null; then  #not ubuntu
 
 conda_version_check
 
-if $VM_OFFER~="data-science"; then
+if $VM_OFFER =~ ".*data-science.*"; then
     CONDA_BASE_ENV='py35'
 else
     # Add things needed in the DSVM
@@ -126,7 +126,7 @@ Installing Azure ML Package for Forecasting into the environment
 ================================================================\n"
 # wget  -q ${AMLPF_REQ_FILE_LOC} -O ${REQUIREMENTS}
 
-sudo ${CONDA_BASE_PATH}conda env update --file ${REQUIREMENTS} -n ${CONDA_BASE_ENV}}
+sudo ${CONDA_BASE_PATH}conda env update --file ${REQUIREMENTS} -n ${CONDA_BASE_ENV}
     # ipykernel should be present already, but we want to be safe
 #     sudo ${CONDA_BASE_PATH}conda install -y ipykernel -n ${CONDA_BASE_ENV}}
 
