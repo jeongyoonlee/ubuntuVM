@@ -18,15 +18,15 @@ IFS=$'\n\t'
 # -o: prevents errors in a pipeline from being masked
 # IFS new value is less likely to cause confusing bugs when looping arrays or arguments (e.g. $@)
 
-usage() { echo "Usage: $0 [-d] [-m] [-h] [-n <deploymentName> ]" 1>&2; exit 1; }
+usage() { echo "Usage: $0 [-d] [-m] [-h] [-n <VMprefix> ]" 1>&2; exit 1; }
 
 # Date string "year.dayofyear.hour" e.g. 18.243.10
 date_string=$(date +'%y.%j.%H')
 
 # Create a unique default deployment name, used to track the task in the Portal
 # (could be cmd line options)
-declare deploymentName="VM_dply_$date_string"
 declare virtualMachineName="fpvm$(date +'%y%j%H')"
+declare deploymentName="$virtualMachineName"
 declare resourceGroupName="fprg_$date_string"
 # Use the local as a default
 declare userName=$USER
@@ -55,13 +55,13 @@ while getopts ":dhn:m" arg; do
 		    templateFilePath="dsvm_template.json"
 			;;
 		n)
-			deploymentName=${OPTARG}
+			deploymentName="${OPTARG}$(date +'%y%j%H')"
 			;;
 		h)
 			printf "$0:
         -d                     Validate template.json
-		-m                     Not just a VM, but a DSVM
-        -n  <DeploymentName>:  Name for VM\n\n"
+	-m                     Not just a VM, but a DSVM
+        -n  <DeploymentName>:  Name for both deployment and the VM\n\n"
 			exit 1
 			;;
 		\?)

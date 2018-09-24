@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # 31 Aug 2018 JMA
 # parameter_set.py  
 # Set the parameters in the template parameters file to match the custom VM name

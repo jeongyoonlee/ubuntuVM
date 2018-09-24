@@ -3,52 +3,68 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "location": {
-            "type": "string"
-        },
-        "virtualMachineName": {
-            "type": "string"
+            "type": "string",
+	    "defaultValue": "westus2"
         },
         "resourceGroupName": {
-            "type": "string"
+            "type": "string",
+	    "defaultValue": "ftk.rg.01"
+        },
+        "virtualMachineName": {
+            "type": "string",
+	    "defaultValue": "ftkvm01"
         },
         "virtualMachineSize": {
-            "type": "string"
+            "type": "string",
+	    "defaultValue": "Standard_D4s_v3"
         },
         "adminUsername": {
-            "type": "string"
+            "type": "string",
+	    "defaultValue": "ftkuser"
         },
         "virtualNetworkName": {
-            "type": "string"
+            "type": "string",
+	    "defaultValue": "ftkvm-vnn"
         },
         "networkInterfaceName": {
-            "type": "string"
+            "type": "string",
+	    "defaultValue": "ftkvm-nin"
         },
         "networkSecurityGroupName": {
-            "type": "string"
+            "type": "string",
+	    "defaultValue": "ftkvm-nsg"
         },
         "adminPublicKey": {
-            "type": "string"
+            "type": "string",
+	    "defaultValue": ""
         },
         "diagnosticsStorageAccountName": {
-            "type": "string"
+            "type": "string",
+	    "defaultValue": ""
         },
         "addressPrefix": {
-            "type": "string"
+            "type": "string",
+	    "defaultValue": "10.1.0.0/24"
         },
         "subnetName": {
-            "type": "string"
+            "type": "string",
+	    "defaultValue": "Subnet"
         },
         "subnetPrefix": {
-            "type": "string"
+            "type": "string",
+	    "defaultValue": "10.1.0.0/24"
         },
         "publicIpAddressName": {
-            "type": "string"
+            "type": "string",
+	    "defaultValue": "ftkvm-ip"
         },
         "publicIpAddressType": {
-            "type": "string"
+            "type": "string",
+	    "defaultValue": "Dynamic"
         },
         "publicIpAddressSku": {
-            "type": "string"
+            "type": "string",
+	    "defaultValue": "Basic"
         }
     },
     "variables": {

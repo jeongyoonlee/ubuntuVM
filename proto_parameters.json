@@ -3,52 +3,37 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "location": {
-            "value": "westus2"
+            "value": ""
         },
         "resourceGroupName": {
-            "value": "dlnn18829"
+            "value": ""
         },
         "virtualMachineName": {
-            "value": "miniub18829"
+            "value": ""
         },
         "virtualMachineSize": {
-            "value":  "Standard_D4s_v3" 
+            "value":  ""
         },
         "adminUsername": {
-            "value": "jma"
+            "value": ""
         },
         "virtualNetworkName": {
-            "value": "dlnn18829-vnet"
+            "value": ""
         },
         "networkInterfaceName": {
-            "value": "miniub1882925"
+            "value": ""
         },
         "networkSecurityGroupName": {
-            "value": "miniub18829-nsg"
+            "value": ""
         },
         "adminPublicKey": {
-            "value": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDQlGyK2ff8rzjbHoBWcF9683iAkQV7P4KalGG1x8Yatxd/rMpuKlJL/LMIsVjavmWJ0UugX1+n+h6bIKM2PoN0TjIXZleRLa02fE6y+jXBkRkFbtuSOCr+qQBJo55dmGt5m06wOsU49xvcSWr2xbYOrlRY6ozPVE24DpuIp9/b7Aw+EKzNcOkwSJGSuPBoafB1pRNEeN8WOwUUfpgiriwHPkYG6+05naW5H5JM5Hs5LQi1FZ7vVALgZgY6pSINq1FN0BOmKbUriIBVHHZ08La3WwP3D6DklVuR8/x7rnEj/3rWz7I8cJEahYJRhsIg70wkkkKeam8gpixzkvnWglpB"
+            "value": ""
         },
         "diagnosticsStorageAccountName": {
-            "value": "dnndiag243"
-        },
-        "addressPrefix": {
-            "value": "10.1.0.0/24"
-        },
-        "subnetName": {
-            "value": "Subnet"
-        },
-        "subnetPrefix": {
-            "value": "10.1.0.0/24"
+            "value": ""
         },
         "publicIpAddressName": {
-            "value": "miniub18829-ip"
-        },
-        "publicIpAddressType": {
-            "value": "Dynamic"
-        },
-        "publicIpAddressSku": {
-            "value": "Basic"
+            "value": ""
         }
     }
 }
