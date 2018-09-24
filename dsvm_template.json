@@ -40,7 +40,7 @@
         },
         "diagnosticsStorageAccountName": {
             "type": "string",
-	    "defaultValue": ""
+	    "defaultValue": "dnndiag243"
         },
         "addressPrefix": {
             "type": "string",

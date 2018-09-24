@@ -29,9 +29,6 @@
         "adminPublicKey": {
             "value": ""
         },
-        "diagnosticsStorageAccountName": {
-            "value": ""
-        },
         "publicIpAddressName": {
             "value": ""
         }

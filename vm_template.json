@@ -6,10 +6,6 @@
             "type": "string",
 	    "defaultValue": "westus2"
         },
-        "resourceGroupName": {
-            "type": "string",
-	    "defaultValue": "ftk.rg.01"
-        },
         "virtualMachineName": {
             "type": "string",
 	    "defaultValue": "ftkvm01"
@@ -40,7 +36,7 @@
         },
         "diagnosticsStorageAccountName": {
             "type": "string",
-	    "defaultValue": ""
+	    "defaultValue": "dnndiag243"
         },
         "addressPrefix": {
             "type": "string",
