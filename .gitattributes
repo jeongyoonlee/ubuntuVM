@@ -1,0 +1,9 @@
+# .gitattributes  JMA 25 Sept 2018
+# Set the default behavior, in case people don't have core.autocrlf set.
+* text=auto
+
+# Certain unix files should next end in crlf
+*.sh eol=lf
+*.py eol=lf
+*.yml eol=lf
+
