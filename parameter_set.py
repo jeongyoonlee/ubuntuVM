@@ -47,9 +47,9 @@ params["networkInterfaceName"]["value"] = resourceGroupName + "-nin"
 params["networkSecurityGroupName"]["value"] = resourceGroupName + "-nsg"
 # params["diagnosticsStorageAccountName"]["value"] = resourceGroupName + "-dsa"
 params["publicIpAddressName"]["value"] = resourceGroupName + "-ip"
-### Instead we select DSVM by choice of template.json file in deploy.sh
+### This should work as a default in the choice of template.json file in deploy.sh
 # if use_dsvm:
-#     params["virtualMachineSize"]["value"] = VANILLA_VM
+params["virtualMachineSize"]["value"] = "Standard_DS3_v2" 
 # else:
 #     params["virtualMachineSize"]["value"] = DSVM
 

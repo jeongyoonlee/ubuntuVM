@@ -23,7 +23,7 @@ CONDA_BASE_ENV='base'         # This was changed to 'base' in the current conda 
                               # Use this value to indicate a non-dsvm install. 
 
 PYTHON_MAINVERSION=3
-PYTHON_SUBVERSION=6
+PYTHON_SUBVERSION=5
 
 conda_version_check() {
     # Is there a current conda environment? 
@@ -83,6 +83,7 @@ free_space_check() {
 if !apt-get 2>/dev/null; then  #not ubuntu
     printf "This script only runs on Ubuntu\n"
     exit 1
+fi
 
 conda_version_check
 
@@ -90,8 +91,7 @@ if $VM_OFFER =~ ".*data-science.*"; then
     CONDA_BASE_ENV='py35'
 else
     # Add things needed in the DSVM
-    python_version_check
-    printf "We are on plain ubuntu, install mono\n"
+   printf "We are on plain ubuntu, install mono\n"
     sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
     echo "deb http://download.mono-project.com/repo/ubuntu stable-xenial main" | sudo tee /etc/apt/sources.list.d/mono-official-stable.list
     sudo apt-get update
@@ -101,6 +101,7 @@ else
     # Vanilla ubuntu conda install was done in conda_version_check()
     conda create --name py35 --file py35_explicit.txt
     CONDA_BASE_ENV='py35'
+    python_version_check
 fi
 
 # Make sure we start in the base conda env, if not there already
