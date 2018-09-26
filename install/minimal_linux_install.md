@@ -22,7 +22,7 @@ It ignores the
 
 from the requirements.yml file.
 
-Note: If you leave the “name” line in the requirements.yml file, conda env update acts like conda env create.   I don’t find where this is documented in the conda documentation.   I suppose “update” and “create” work the same, taking the name of environment to be modified from the requirements file, as the default and overriding it if the name is specified on the command line. 
+Note: If you leave the “name” line in the requirements.yml file, ` conda env update` applies to that environment and if one doesn’t exist it creates one like `conda env create.`   I don’t find where this is documented in the conda documentation.   I suppose “update” and “create” work the same, taking the name of environment to be modified from the requirements file, as the default and overriding it if the name is specified on the command line. 
 
 # OK - now go to a notebooks directory and run
 

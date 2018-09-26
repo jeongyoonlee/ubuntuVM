@@ -10,9 +10,9 @@
 VMUSER=$1
 cd /home/${VMUSER}
 # Bring in subsidiary files:
-curl -O "https://github.com/jmagosta/ubuntuVM/blob/master/install/py35_explicit.txt"
-curl -O "https://github.com/jmagosta/ubuntuVM/blob/master/install/requirements_min_linux.yml"
-curl -O "https://raw.githubusercontent.com/jmagosta/ubuntuVM/master/install/min_install_amlpf_linux.sh"
+curl -O "https://raw.githubusercontent.com/jmagosta/ubuntuVM/master/py35_explicit.txt" 
+# curl -O "https://github.com/jmagosta/ubuntuVM/blob/master/install/requirements_min_linux.yml" Download this in the install script. 
+curl -O "https://raw.githubusercontent.com/jmagosta/ubuntuVM/master/min_install_amlpf_linux.sh"
 
 # The json parser for bash? Install if missing
 if ! hash jq 2>/dev/null; then
