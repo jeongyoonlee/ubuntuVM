@@ -45,9 +45,9 @@ conda_version_check() {
     if (( MAJOR_VERSION >= CONDA_MAINVERSION )) && ((  MINOR_VERSION >= CONDA_SUBVERSION )); then 
             DEFAULT_ENV_NAME=CONDA_BASE_ENV
             printf "The install will use your current conda version $VERSION_NO.\n"
-    else
-        sudo conda update conda
     fi
+    # cond
+    conda update -n base -c defaults conda
 
 }
 

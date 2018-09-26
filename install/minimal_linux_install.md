@@ -10,7 +10,19 @@ $ conda create --name py35 --file py35_explicit.txt
 
 # Check for necessary versions - and install the latest FTK wheel 
 
-$ conda env update --file requirements_min_linux.yml
+$ conda env update --file requirements_min_linux.yml --name py35
+
+To force a downgrade to python 3.5.2 one uses 
+
+$ conda env update   --file requirements.yml –name py35
+
+It ignores the 
+
+`name: azuremlftk_july2018  ` 
+
+from the requirements.yml file.
+
+Note: If you leave the “name” line in the requirements.yml file, conda env update acts like conda env create.   I don’t find where this is documented in the conda documentation.   I suppose “update” and “create” work the same, taking the name of environment to be modified from the requirements file, as the default and overriding it if the name is specified on the command line. 
 
 # OK - now go to a notebooks directory and run
 
