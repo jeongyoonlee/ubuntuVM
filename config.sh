@@ -4,7 +4,7 @@
 
 # This file runs with waagent permissions
 # You will find it uploaded to
-# /var/lib/waagent/Microsoft.OSTCExtensions.CustomScriptForLinux-1.5.3/downloads
+# /var/lib/waagent/Microsoft.OSTCExtensions.CustomScriptForLinux-1.5.3/download
 # along with its errout and stdout
 
 VMUSER=$1
@@ -40,5 +40,6 @@ printf "export VM_OFFER=${VM_OFFER}\nexport VM_VERSION=${VM_VERSION}\n" >> /home
 # (This doesn't do what's intended.)
 source .bashrc
 
-# Now install fp
-source ./min_install_amlpf_linux.sh
+# Now install fp at user level
+chmod +x ./min_install_amlpf_linux.sh
+sudo -l -c './min_install_amlpf_linux.sh'

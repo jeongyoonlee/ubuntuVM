@@ -8,20 +8,25 @@ example we load the Forecasting Package to customize the VM.
 
 * Deploy local shell script in github 
 * that runs `az group deployment create   … `
-* using `template.json` to create VM and related resources
+* using  a template.json file to create VM and related resources
 * which invokes a config shell script on the newly created VM
 * which can install, for instance, the Forecast Package.
 ```
 
 The user executes one command  that completes with a running VM with PF pre-installed, much like the DSVM comes with tools pre-installed. There are options to create either a fresh ubuntu VM or creating it on top of the DSVM.  
 
-You will need an Azure subscription and an Azure location where the resources will be created. Edit the file called `secrets.sh` to specify them.
+You will need an Azure subscription and an Azure location where the resources will be created. Edit the file called `secrets.sh` to specify them. The file
+looks like this:
+
+```declare resourceGroupLocation="West US 2"
+   declare subscriptionId="XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXX"
+```
 
 These scripts invoke [Azure CLI 2](https://docs.microsoft.com/en-us/cli/azure/?view=azure-cli-latest commands that take [ARM](https://docs.microsoft.com/en-us/rest/api/resources) template files that describe what to create.
 
 ### Technicalities
 
-The ARM template requires a URI for the config shell script to be run on the VM, which should be provided by this repo.  This can be done using a permanent link to the file in github.  This is created in github by browsing to the file, displaying the raw version, then pressing "y" as a shortcut to convert the link shown in the browser to a `permalink.`  _I bet you din't know that._  i
+The ARM template requires a URI for the config shell script to be run on the VM, which is provided by this repo.  This is done using a permanent link to the file in github.  This is created in github by browsing to the file, displaying the raw version, then pressing "y" as a shortcut to convert the link shown in the browser to a `permalink.`  _I bet you din't know that._  i
 
 #
 ### Resource group creation
