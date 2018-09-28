@@ -28,6 +28,7 @@ PYTHON_SUBVERSION=5
 conda_version_check() {
     # Is there a current conda environment? 
     if ! hash conda 2>/dev/null; then
+        printf "Installing conda.\n"
         sudo apt update --yes
         sudo apt upgrade --yes
         # Get Miniconda and make it the main Python interpreter
@@ -37,17 +38,18 @@ conda_version_check() {
         echo "PATH=\$PATH:\$HOME/miniconda/bin" >> .bashrc
     fi
 
-    # Check the version
-    CONDA_VERSION=$(conda --version 2>&1)        # Output is to stdout.
-    VERSION_NO=${CONDA_VERSION/conda /}
-    MAJOR_VERSION=${VERSION_NO:0:1}
-    MINOR_VERSION=${VERSION_NO:2:1}
-    if (( MAJOR_VERSION >= CONDA_MAINVERSION )) && ((  MINOR_VERSION >= CONDA_SUBVERSION )); then 
-            DEFAULT_ENV_NAME=CONDA_BASE_ENV
-            printf "The install will use your current conda version $VERSION_NO.\n"
-    fi
-    # cond
-    conda update -n base -c defaults conda
+    # Check the version (might not be needed)
+    # CONDA_VERSION=$(conda --version 2>&1)        # Output is to stdout.
+    # VERSION_NO=${CONDA_VERSION/conda /}
+    # MAJOR_VERSION=${VERSION_NO:0:1}
+    # MINOR_VERSION=${VERSION_NO:2:1}
+    # if (( MAJOR_VERSION >= CONDA_MAINVERSION )) && ((  MINOR_VERSION >= CONDA_SUBVERSION )); then 
+    #         Note: upgrading conda in the base env makes it available in all other envs. 
+    #         DEFAULT_ENV_NAME=CONDA_BASE_ENV
+    #         printf "The install will use your current conda version $VERSION_NO.\n"
+    # fi
+    # # cond
+    # conda update -n base -c defaults conda
 
 }
 
