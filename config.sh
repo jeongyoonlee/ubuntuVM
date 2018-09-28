@@ -42,4 +42,4 @@ source .bashrc
 
 # Now install fp at user level
 chmod +x "/home/${VMUSER}/min_install_amlpf_linux.sh"
-sudo -u ${VMUSER}  bash -x "/home/${VMUSER}/min_install_amlpf_linux.sh"
+sudo -u ${VMUSER}  bash "/home/${VMUSER}/min_install_amlpf_linux.sh"

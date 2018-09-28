@@ -79,7 +79,7 @@ free_space_check() {
 
 ##########################################################################
 # MAIN ############# 
-
+set -x
 if !apt-get 2>/dev/null; then  #not ubuntu
     printf "This script only runs on Ubuntu\n"
     exit 1
@@ -138,4 +138,5 @@ sudo ${CONDA_BASE_PATH}conda env update --file ${REQUIREMENTS} -n ${CONDA_BASE_E
 IPY_PATH_IN_AML_ENV=`which ipython`
 sudo ${IPY_PATH_IN_AML_ENV} kernel install --name ${CONDA_BASE_ENV} --display-name "${CONDA_BASE_ENV}"
 
+set +x
 exit 0
