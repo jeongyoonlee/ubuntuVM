@@ -89,7 +89,7 @@ fi
 
 conda_version_check
 
-if $VM_OFFER =~ ".*data-science.*"; then
+if [ $VM_OFFER == "linux-data-science-vm-ubuntu" ]; then    # god help us if the DSVM product name is changed. 
     CONDA_BASE_ENV='py35'
 else
     # Add things needed in the DSVM
