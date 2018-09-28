@@ -41,5 +41,5 @@ printf "export VM_OFFER=${VM_OFFER}\nexport VM_VERSION=${VM_VERSION}\n" >> /home
 source .bashrc
 
 # Now install fp at user level
-chmod +x "/home/${USER}/min_install_amlpf_linux.sh"
-sudo -u ${USER}  bash -x "/home/${USER}/min_install_amlpf_linux.sh"
+chmod +x "/home/${VMUSER}/min_install_amlpf_linux.sh"
+sudo -u ${VMUSER}  bash -x "/home/${VMUSER}/min_install_amlpf_linux.sh"
