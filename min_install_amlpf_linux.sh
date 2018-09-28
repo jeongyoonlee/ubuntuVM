@@ -84,7 +84,7 @@ if !apt-get 2>/dev/null; then  #not ubuntu
     printf "This script only runs on Ubuntu\n"
     exit 1
 else
-    printf( "Running as id: $((id))")
+    printf "Running as id: $(id)\n"
 fi
 
 conda_version_check
