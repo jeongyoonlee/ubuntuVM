@@ -83,6 +83,8 @@ free_space_check() {
 if !apt-get 2>/dev/null; then  #not ubuntu
     printf "This script only runs on Ubuntu\n"
     exit 1
+else
+    printf( "Running as id: $((id))")
 fi
 
 conda_version_check

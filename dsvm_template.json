@@ -96,7 +96,7 @@
                 "autoUpgradeMinorVersion": true,
                 "settings": {
                     "fileUris": ["https://raw.githubusercontent.com/jmagosta/ubuntuVM/master/config.sh" ],
-                    "commandToExecute": "[concat('bash config.sh ', parameters('adminUsername'))]"
+                    "commandToExecute": "[concat('bash -x config.sh ', parameters('adminUsername'))]"
                     }
                 }
             }        
