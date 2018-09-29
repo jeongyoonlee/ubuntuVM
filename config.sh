@@ -9,6 +9,7 @@
 
 VMUSER=$1
 cd /home/${VMUSER}
+
 # Bring in subsidiary files:
 curl -O "https://raw.githubusercontent.com/jmagosta/ubuntuVM/master/py35_explicit.txt" 
 # curl -O "https://github.com/jmagosta/ubuntuVM/blob/master/install/requirements_min_linux.yml" Download this in the install script. 
@@ -42,4 +43,4 @@ source .bashrc
 
 # Now install fp at user level
 chmod +x "/home/${VMUSER}/min_install_amlpf_linux.sh"
-sudo -u ${VMUSER}  bash "/home/${VMUSER}/min_install_amlpf_linux.sh"
+sudo -u ${VMUSER}  bash --login "/home/${VMUSER}/min_install_amlpf_linux.sh"  # --login to set path. 
