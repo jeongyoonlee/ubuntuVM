@@ -87,6 +87,7 @@ if !apt-get 2>/dev/null; then  #not ubuntu
     exit 1
 else
     printf "Running as id: $(id)\n"
+    printf "$(env | grep VM) \n"
 fi
 
 conda_version_check
