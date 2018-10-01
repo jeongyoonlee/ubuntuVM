@@ -7,6 +7,7 @@
 ###############################################################################
 ### Define a few variables that help govern the code
 
+source .bashrc
 STORAGE_ACCOUNT=azuremlftkrelease
 RELEASE=latest
 STORAGE_PREFIX=samples
