@@ -37,10 +37,10 @@ fi
 
 chown -R ${VMUSER} * 
 # Append variables to .bashrc file
-printf "export VM_OFFER=${VM_OFFER}\nexport VM_VERSION=${VM_VERSION}\n" >> /home/${VMUSER}/.bashrc
-
-source .bashrc
-tail -5 .bashrc
+printf "export VM_OFFER=${VM_OFFER}\nexport VM_VERSION=${VM_VERSION}\n" >> /home/${VMUSER}/bashrc
+echo $SHELL
+source /home/${VMUSER}/bashrc
+tail -5 /home/${VMUSER}/bashrc
 
 # Now install fp at user level
 chmod +x "/home/${VMUSER}/min_install_amlpf_linux.sh"

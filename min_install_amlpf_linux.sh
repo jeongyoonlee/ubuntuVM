@@ -8,8 +8,10 @@
 ### Define a few variables that help govern the code
 set -x
 printf "Running min_install_amlpf ****************************************\n"
-source .bashrc
-tail -5 .bashrc
+echo $SHELL
+source ~/bashrc
+tail -5 ~/bashrc
+
 STORAGE_ACCOUNT=azuremlftkrelease
 RELEASE=latest
 STORAGE_PREFIX=samples
