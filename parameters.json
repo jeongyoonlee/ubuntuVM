@@ -1,18 +1,23 @@
 {
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
-    "contentVersion": "1.0.0.0",
     "parameters": {
-        "location": {
-            "value": "westus2"
+        "virtualMachineSize": {
+            "value": "Standard_DS3_v2"
         },
-        "resourceGroupName": {
-            "value": "dlnn18829"
+        "location": {
+            "value": "West US 2"
         },
         "virtualMachineName": {
-            "value": "miniub18829"
+            "value": "fpvm1827321"
         },
-        "virtualMachineSize": {
-            "value": "Standard_B2s"
+        "publicIpAddressName": {
+            "value": "dlnn18829-ip"
+        },
+        "networkInterfaceName": {
+            "value": "dlnn18829-nin"
+        },
+        "networkSecurityGroupName": {
+            "value": "dlnn18829-nsg"
         },
         "adminUsername": {
             "value": "jma"
@@ -20,35 +25,12 @@
         "virtualNetworkName": {
             "value": "dlnn18829-vnet"
         },
-        "networkInterfaceName": {
-            "value": "miniub1882925"
-        },
-        "diskSizeGB": {
-            "value": "30"
-        },
-        "networkSecurityGroupName": {
-            "value": "miniub18829-nsg"
+        "resourceGroupName": {
+            "value": "dlnn18829"
         },
         "adminPublicKey": {
-            "value": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDQlGyK2ff8rzjbHoBWcF9683iAkQV7P4KalGG1x8Yatxd/rMpuKlJL/LMIsVjavmWJ0UugX1+n+h6bIKM2PoN0TjIXZleRLa02fE6y+jXBkRkFbtuSOCr+qQBJo55dmGt5m06wOsU49xvcSWr2xbYOrlRY6ozPVE24DpuIp9/b7Aw+EKzNcOkwSJGSuPBoafB1pRNEeN8WOwUUfpgiriwHPkYG6+05naW5H5JM5Hs5LQi1FZ7vVALgZgY6pSINq1FN0BOmKbUriIBVHHZ08La3WwP3D6DklVuR8/x7rnEj/3rWz7I8cJEahYJRhsIg70wkkkKeam8gpixzkvnWglpB"
-        },
-        "diagnosticsStorageAccountName": {
-            "value": "dnndiag243"
-        },
-        "diagnosticsStorageAccountId": {
-            "value": "/subscriptions/3e7eaee5-4f68-46cb-b536-f54b10a95245/resourceGroups/dnn/providers/Microsoft.Storage/storageAccounts/dnndiag243"
-        },
-        "subnetName": {
-            "value": "Subnet"
-        },
-        "publicIpAddressName": {
-            "value": "miniub18829-ip"
-        },
-        "publicIpAddressType": {
-            "value": "Dynamic"
-        },
-        "publicIpAddressSku": {
-            "value": "Basic"
+            "value": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDSd5T/4n6t62Br5JAJp1ea231wiZqudMwFfsL1NPZ712tg8Xb8S6KPGVz21wcqxraBiGGturNtfLIirjVCmiB7S+R1obEF5pVI/XkHN2bXQwjH8a7wtBSsdTcG57eVeJl+omvAy9MgM2Di6Lm1QnrGpAwQSn0aBmiklYmmaWu3DJ3yahcZSQSJRbQqDXEoUWT/tsVSzUVfolGj8T13r98G9yJUNKdqlMgbK62K+c3d0uHYKjuDU9marnsQ2ytt4caVH5+0zcgddjbN8epVC/frVU9zrx+NSfX1l1nfggSell3T90+Lb4AWBp5YZzM+iQiE4UwheI6H6q/0NPDiS4W9 jma@MININT-0VHF0RC\n"
         }
-    }
+    },
+    "contentVersion": "1.0.0.0"
 }

@@ -2,16 +2,12 @@
 # Copyright (C) Microsoft Corporation. All rights reserved
 # Install the latest version of the AML Package for Forecasting  from Azure Storage
 # To run,
-# $./min_install_amlpf_linux.sh [--dsvm] [-help]
+# $./min_install_amlpf_linux.sh [-help]
 #
 ###############################################################################
 ### Define a few variables that help govern the code
 set -x
 printf "Running min_install_amlpf ****************************************\n"
-echo $SHELL
-source ~/bashrc
-tail -5 ~/bashrc
-
 STORAGE_ACCOUNT=azuremlftkrelease
 RELEASE=latest
 STORAGE_PREFIX=samples
@@ -44,15 +40,15 @@ conda_version_check() {
     fi
 
     # Check the version (might not be needed)
-    # CONDA_VERSION=$(conda --version 2>&1)        # Output is to stdout.
-    # VERSION_NO=${CONDA_VERSION/conda /}
-    # MAJOR_VERSION=${VERSION_NO:0:1}
-    # MINOR_VERSION=${VERSION_NO:2:1}
-    # if (( MAJOR_VERSION >= CONDA_MAINVERSION )) && ((  MINOR_VERSION >= CONDA_SUBVERSION )); then 
-    #         Note: upgrading conda in the base env makes it available in all other envs. 
-    #         DEFAULT_ENV_NAME=CONDA_BASE_ENV
-    #         printf "The install will use your current conda version $VERSION_NO.\n"
-    # fi
+    CONDA_VERSION=$(conda --version 2>&1)        # Output is to stdout.
+    VERSION_NO=${CONDA_VERSION/conda /}
+    MAJOR_VERSION=${VERSION_NO:0:1}
+    MINOR_VERSION=${VERSION_NO:2:1}
+    if (( MAJOR_VERSION >= CONDA_MAINVERSION )) && ((  MINOR_VERSION >= CONDA_SUBVERSION )); then 
+            Note: upgrading conda in the base env makes it available in all other envs. 
+            DEFAULT_ENV_NAME=CONDA_BASE_ENV
+            printf "The install will use your current conda version $VERSION_NO.\n"
+    fi
     # # cond
     # conda update -n base -c defaults conda
 
@@ -86,7 +82,7 @@ free_space_check() {
 
 ##########################################################################
 # MAIN ############# 
-
+set -x
 if !apt-get 2>/dev/null; then  #not ubuntu
     printf "This script only runs on Ubuntu\n"
     exit 1
@@ -95,18 +91,17 @@ else
     printf "$(env | grep VM) \n"
 fi
 
-printf ">>> VM_OFFER:  ${VM_OFFER}"
-# conda_version_check
+conda_version_check
 
 if [ -n "${VM_OFFER}" ]; then
     CONDA_BASE_ENV='py35'
 else
     # Add things needed in the DSVM
    printf "We are on plain ubuntu, install mono\n"
-    # sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
-    # echo "deb http://download.mono-project.com/repo/ubuntu stable-xenial main" | sudo tee /etc/apt/sources.list.d/mono-official-stable.list
-    # sudo apt-get update
-    # sudo apt-get -y install mono-complete
+    sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
+    echo "deb http://download.mono-project.com/repo/ubuntu stable-xenial main" | sudo tee /etc/apt/sources.list.d/mono-official-stable.list
+    sudo apt-get update
+    sudo apt-get -y install mono-complete
     OS=${UBUNTU}
     printf "Create conda env $CONDA_BASE_ENV\n"
     # Vanilla ubuntu conda install was done in conda_version_check()
