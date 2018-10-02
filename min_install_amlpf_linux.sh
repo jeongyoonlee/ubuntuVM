@@ -8,9 +8,6 @@
 ### Define a few variables that help govern the code
 set -x
 printf "Running min_install_amlpf ****************************************\n"
-echo $SHELL
-source ~/bashrc
-tail -5 ~/bashrc
 
 STORAGE_ACCOUNT=azuremlftkrelease
 RELEASE=latest
@@ -44,18 +41,17 @@ conda_version_check() {
     fi
 
     # Check the version (might not be needed)
-    # CONDA_VERSION=$(conda --version 2>&1)        # Output is to stdout.
-    # VERSION_NO=${CONDA_VERSION/conda /}
-    # MAJOR_VERSION=${VERSION_NO:0:1}
-    # MINOR_VERSION=${VERSION_NO:2:1}
-    # if (( MAJOR_VERSION >= CONDA_MAINVERSION )) && ((  MINOR_VERSION >= CONDA_SUBVERSION )); then 
-    #         Note: upgrading conda in the base env makes it available in all other envs. 
-    #         DEFAULT_ENV_NAME=CONDA_BASE_ENV
-    #         printf "The install will use your current conda version $VERSION_NO.\n"
-    # fi
+    CONDA_VERSION=$(conda --version 2>&1)        # Output is to stdout.
+    VERSION_NO=${CONDA_VERSION/conda /}
+    MAJOR_VERSION=${VERSION_NO:0:1}
+    MINOR_VERSION=${VERSION_NO:2:1}
+    if (( MAJOR_VERSION >= CONDA_MAINVERSION )) && ((  MINOR_VERSION >= CONDA_SUBVERSION )); then 
+            Note: upgrading conda in the base env makes it available in all other envs. 
+            DEFAULT_ENV_NAME=CONDA_BASE_ENV
+            printf "The install will use your current conda version $VERSION_NO.\n"
+    fi
     # # cond
     # conda update -n base -c defaults conda
-
 }
 
 python_version_check() {
