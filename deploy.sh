@@ -83,11 +83,6 @@ if [ ! -f "$templateFilePath" ]; then
 	exit 1
 fi
 
-if [ ! -f "$parametersFilePath" ]; then
-	echo "$parametersFilePath not found"
-	exit 1
-fi
-
 if [ -z "$subscriptionId" ]; then
 	echo "SubscriptionId is empty"
 	usage
@@ -115,6 +110,11 @@ fi
 	${userName}\
 	${subscriptionId}\
 	${resourceGroupLocation}
+
+if [ ! -f "$parametersFilePath" ]; then
+	echo "$parametersFilePath not found"
+	exit 1
+fi
 
 # Customize config.sh that is pushed to the VM
 # ./config_set.py ${userName}

@@ -8,25 +8,43 @@ example we load the Forecasting Package to customize the VM.
 
 * Deploy local shell script in github 
 * that runs `az group deployment create   … `
-* using  a template.json file to create VM and related resources
+* using  a `template.json` file to create VM and related resources
 * which invokes a config shell script on the newly created VM
 * which can install, for instance, the Forecast Package.
-```
 
-The user executes one command  that completes with a running VM with PF pre-installed, much like the DSVM comes with tools pre-installed. There are options to create either a fresh ubuntu VM or creating it on top of the DSVM.  
-
-You will need an Azure subscription and an Azure location where the resources will be created. Edit the file called `secrets.sh` to specify them. The file
-looks like this:
-
-```declare resourceGroupLocation="West US 2"
-   declare subscriptionId="XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXX"
-```
+The user executes one command that completes with a running VM with PF pre-installed, much like the DSVM comes with tools pre-installed. There are options to create either a fresh ubuntu VM or creating it on top of the DSVM.  
 
 These scripts invoke [Azure CLI 2](https://docs.microsoft.com/en-us/cli/azure/?view=azure-cli-latest commands that take [ARM](https://docs.microsoft.com/en-us/rest/api/resources) template files that describe what to create.
 
+### Prerequisites
+
+You will need an Azure subscription and an Azure location where the resources will be created. Edit the file called `secrets.sh` to specify them. The file looks like this:
+
+```
+declare resourceGroupLocation="West US 2"
+declare subscriptionId="XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXX"
+```
+
+You also need a SSH public key on the system where you execute the command. If you haven't, you can create an SSH key pair as follows:
+```bash
+$ ssh-keygen
+Generating public/private rsa key pair.
+Enter file in which to save the key (/home/$USER/.ssh/id_rsa): <Enter>
+Enter passphrase (empty for no passphrase): <Enter>
+Enter same passphrase again: <Enter>
+Your identification has been saved in /home/$USER/.ssh/id_rsa.
+Your public key has been saved in /home/$USER/.ssh/id_rsa.pub.
+The key fingerprint is:
+SHA256:xxx... $USER@$HOSTNAME
+The key's randomart image is:
++---[RSA 2048]----+
+...
++----[SHA256]-----+
+```
+
 ### Technicalities
 
-The ARM template requires a URI for the config shell script to be run on the VM, which is provided by this repo.  This is done using a permanent link to the file in github.  This is created in github by browsing to the file, displaying the raw version, then pressing "y" as a shortcut to convert the link shown in the browser to a `permalink.`  _I bet you din't know that._  i
+The ARM template requires a URI for the config shell script to be run on the VM, which is provided by this repo.  This is done using a permanent link to the file in github.  This is created in github by browsing to the file, displaying the raw version, then pressing "y" as a shortcut to convert the link shown in the browser to a `permalink.`  _I bet you didn't know that._  i
 
 #
 ### Resource group creation
