@@ -14,7 +14,7 @@ example we load the Forecasting Package to customize the VM.
 
 The user executes one command that completes with a running VM with PF pre-installed, much like the DSVM comes with tools pre-installed. There are options to create either a fresh ubuntu VM or creating it on top of the DSVM.  
 
-These scripts invoke [Azure CLI 2](https://docs.microsoft.com/en-us/cli/azure/?view=azure-cli-latest commands that take [ARM](https://docs.microsoft.com/en-us/rest/api/resources) template files that describe what to create.
+These scripts invoke [Azure CLI 2](https://docs.microsoft.com/en-us/cli/azure/?view=azure-cli-latest) commands that take [ARM](https://docs.microsoft.com/en-us/rest/api/resources) template files that describe what to create.
 
 ### Prerequisites
 
